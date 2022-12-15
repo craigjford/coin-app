@@ -35,7 +35,6 @@ function Login({ setUser }) {
       }  
     })  
   }   
-console.log('errors = ', errors)
 
   return (
     <div>
@@ -65,11 +64,9 @@ console.log('errors = ', errors)
       <div>
           <br />
           <br />
-          {/* <ul>
-            {errors.map((err) => (
-                <li key={err}>{err}</li>
-            ))}
-          </ul> */}
+          <>
+            {errors.error}
+          </>
       </div>
     </div>
   );

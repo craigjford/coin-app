@@ -55,6 +55,9 @@ const UserSignUpForm = ({ setUser }) => {
     setUrl("");
   }  
 
+  const errorsList = errors.map((err) => <li key={err}>{err}</li>);
+
+
   return (
     <div>
       <h1 className="formheader">Welcome to the Sign Up Form</h1>
@@ -133,7 +136,7 @@ const UserSignUpForm = ({ setUser }) => {
         <br />
         <br />
         <ul>
-          {/* {errors ? errors.map((err) => <li key={err}>{err}</li> : null) } */}
+          {errorsList}
         </ul>
       </div>  
   </div>

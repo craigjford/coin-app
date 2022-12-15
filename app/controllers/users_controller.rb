@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
     # before_action :authorize
 
-    # rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity
+    rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity
 
     def index               
         current_user
@@ -21,17 +21,9 @@ class UsersController < ApplicationController
     end
 
     def create  
-        byebug
-        user = User.create(user_params)
-        if user.valid?
-            byebug
-            session[:user_id] = user.id
-            render json: user, status: :created
-        else
-            byebug
-            render json: { error: "Invalid User Record Complete"}, status: :unprocessable_entity   
-        end
-
+        user = User.create!(user_params)
+        session[:user_id] = user.id
+        render json: user, status: :created
     end
 
     private
