@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-    before_action :authorize
+    # before_action :authorize
 
-    rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity
+    # rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity
 
     def index               
         current_user
@@ -21,9 +21,17 @@ class UsersController < ApplicationController
     end
 
     def create  
-        user = User.create!(user_params)
-        session[:user_id] = user.id
-        render json: user, status: :created
+        byebug
+        user = User.create(user_params)
+        if user.valid?
+            byebug
+            session[:user_id] = user.id
+            render json: user, status: :created
+        else
+            byebug
+            render json: { error: "Invalid User Record Complete"}, status: :unprocessable_entity   
+        end
+
     end
 
     private
@@ -36,9 +44,9 @@ class UsersController < ApplicationController
         params.permit(:username, :password, :password_confirmation, :city, :state, :phone, :url)
     end
 
-    def authorize   
-        return render json: { error: "User not authorized" }, status: :unauthorized unless session.include?(:user_id)
-    end
+    # def authorize   
+    #     return render json: { error: "User not authorized" }, status: :unauthorized unless session.include?(:user_id)
+    # end
 
     # def render_not_found(error)
     #     render json: { error: "#{error.model} not found" }, status: :not_found

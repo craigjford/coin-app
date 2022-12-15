@@ -60,7 +60,7 @@ console.log('errors = ', errors)
         />
         <br />
         <br />
-        <button type="submit">Submit</button>
+        <button type="submit" className="submit-btn">Submit</button>
       </form>
       <div>
           <br />
