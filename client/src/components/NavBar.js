@@ -1,17 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
+import { UserContext } from "../context/user";
 import { NavLink, useHistory } from 'react-router-dom';
 
-const NavBar = ({ user, setUser }) =>  {
+const NavBar = () =>  {
+  const { loggedIn, logout } = useContext(UserContext);
   const history = useHistory();
 
-  console.log('in Navbar - user = ')
+  console.log('in Navbar - user = ', loggedIn)
 
   const handleLogoutClick = () => {
     fetch("/logout", 
     { method: "DELETE" })
     .then((r) => {
       if (r.ok) {
-        setUser(null);
+        logout();
         history.push('/');
       }
     });
@@ -20,10 +22,13 @@ const NavBar = ({ user, setUser }) =>  {
   return (
     <header>
       <div>
-        {user ? (
+        {loggedIn ? (
         <>
           <NavLink exact to="/">
               <button>Home</button>
+          </NavLink>
+          <NavLink exact to="/customers">
+              <button>Customers</button>
           </NavLink>
           <button onClick={handleLogoutClick}>Logout</button>
         </>  
@@ -40,6 +45,7 @@ const NavBar = ({ user, setUser }) =>  {
             </NavLink>
           </>
         )}
+        <hr />
       </div>
     </header>
   );

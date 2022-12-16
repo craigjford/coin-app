@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react'
 
-//create the context 
 const UserContext = React.createContext();
 
 function UserProvider({ children }) {
     const [user, setUser] = useState({});
     const [loggedIn, setLoggedIn] = useState(false);
 
-    console.log('in UserProvider', user)
-
-    useEffect(() => {
+    useEffect(()=>{
         fetch('/me')
-        .then(res => res.json())
-        .then(data => {
-            setUser(data)
-            data.error ? setLoggedIn(false) : setLoggedIn(true)
+        .then(res => {
+            if(res.ok) {
+                res.json().then(user => {
+                    setUser(user);
+                    setLoggedIn(true);
+                })
+            }    
         })
-    }, [])
+    },[])
 
     const signup = (user) => {
         setUser(user);
@@ -41,4 +41,3 @@ function UserProvider({ children }) {
 }
 
 export { UserContext, UserProvider };
-

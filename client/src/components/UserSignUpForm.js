@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext} from 'react';
 import { useHistory } from 'react-router-dom';
-// import React, { useState, useContext } from 'react';
-// import { UserContext } from '../context/user'
+import { UserContext } from "../context/user";
 
-const UserSignUpForm = ({ setUser }) => {
-  // const { loggedIn, signup } = useContext(UserContext);
+const UserSignUpForm = () => {
+  const { loggedIn, signup } = useContext(UserContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
@@ -13,6 +12,8 @@ const UserSignUpForm = ({ setUser }) => {
   const [phone, setPhone] = useState("");
   const [url, setUrl] = useState("");
   const [errors, setErrors] = useState([]);
+
+
   const history = useHistory();
 
   const handleSubmit = (event) => {
@@ -35,7 +36,7 @@ const UserSignUpForm = ({ setUser }) => {
     .then(res => {
       if (res.ok) {
           res.json().then(user => {
-            setUser(user) 
+            signup(user) 
             initializeFormfields()
             history.push('/')
           })
@@ -57,7 +58,8 @@ const UserSignUpForm = ({ setUser }) => {
 
   const errorsList = errors.map((err) => <li key={err}>{err}</li>);
 
-
+  if (loggedIn) {return history.push('/')}
+  
   return (
     <div>
       <h1 className="formheader">Welcome to the Sign Up Form</h1>

@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { UserContext } from "../context/user";
 import { useHistory } from 'react-router-dom'
 
-function Login({ setUser }) {
+const Login = () => {
+  const { loggedIn, login } = useContext(UserContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState("");
   const history = useHistory();
 
-  console.log('in Login - user = ')
+  console.log('in Login - loggedIn = ', loggedIn);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -25,13 +27,13 @@ function Login({ setUser }) {
       if (res.ok) {
           res.json().then(user => {
             console.log('user = ', user);
-            setUser(user);
+            login(user);
             setUsername("");
             setPassword("");
             history.push('/');
           })
       } else { 
-            res.json().then(err => setErrors(err))  
+          res.json().then(err => setErrors(err))  
       }  
     })  
   }   
