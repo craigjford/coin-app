@@ -7,10 +7,11 @@ const UserSignUpForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [phone, setPhone] = useState("");
-  const [url, setUrl] = useState("");
+  const [email, setEmail] = useState("");
   const [errors, setErrors] = useState([]);
 
 
@@ -27,10 +28,11 @@ const UserSignUpForm = () => {
         username: username,
         password: password,
         password_confirmation: passwordConfirmation,
+        address: address,
         city: city,
         state: state,
         phone: phone,
-        url: url
+        email: email
       })
     }) 
     .then(res => {
@@ -50,22 +52,23 @@ const UserSignUpForm = () => {
     setUsername("");
     setPassword("");
     setPasswordConfirmation("");
+    setAddress("");
     setCity("");
     setState("");
     setPhone("");
-    setUrl("");
+    setEmail("");
   }  
 
   const errorsList = errors.map((err) => <li key={err}>{err}</li>);
 
   if (loggedIn) {return history.push('/')}
-  
+
   return (
     <div>
       <h1 className="formheader">Welcome to the Sign Up Form</h1>
       <br />
       <form className="course-form" onSubmit={handleSubmit}>
-      <label id="formlabel" htmlFor="username">Username  </label>
+      <label id="formlabel" htmlFor="username">Username:  </label>
         <input
           type="text"
           id="username"
@@ -75,7 +78,7 @@ const UserSignUpForm = () => {
         />
       <br />
       <br />  
-      <label id="formlabel" htmlFor="password">Password </label>
+      <label id="formlabel" htmlFor="password">Password: </label>
         <input
           type="password"
           id="password"
@@ -85,7 +88,7 @@ const UserSignUpForm = () => {
         />
       <br />
       <br />  
-      <label id="formlabel" htmlFor="password_confirmation">Password Confirmation</label>
+      <label id="formlabel" htmlFor="password_confirmation">Password Confirmation: </label>
         <input
           type="password"
           id="password_confirmation"
@@ -95,7 +98,16 @@ const UserSignUpForm = () => {
         />
       <br />
       <br /> 
-      <label id="formlabel" htmlFor="city">City </label>
+      <label id="formlabel" htmlFor="address">Address: </label>
+        <input
+          type="text"
+          id="address"
+          onChange={(e) => setAddress(e.target.value)}
+          value={address}
+        />
+      <br />
+      <br /> 
+      <label id="formlabel" htmlFor="city">City: </label>
         <input
           type="text"
           id="city"
@@ -104,7 +116,7 @@ const UserSignUpForm = () => {
         />
       <br />
       <br /> 
-      <label id="formlabel" htmlFor="state">State </label>
+      <label id="formlabel" htmlFor="state">State: </label>
         <input
           type="text"
           id="state"
@@ -113,7 +125,7 @@ const UserSignUpForm = () => {
         />
       <br />
       <br /> 
-      <label id="formlabel" htmlFor="phone">Phone </label>
+      <label id="formlabel" htmlFor="phone">Phone: </label>
         <input
           type="text"
           id="phone"
@@ -123,12 +135,12 @@ const UserSignUpForm = () => {
         />
       <br />
       <br /> 
-      <label id="formlabel" htmlFor="url">Image </label>
+      <label id="formlabel" htmlFor="email">Email: </label>
         <input
           type="text"
-          id="url"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
+          id="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
       <br />
       <br /> 
