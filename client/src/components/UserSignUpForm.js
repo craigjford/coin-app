@@ -144,7 +144,7 @@ const UserSignUpForm = () => {
         />
       <br />
       <br /> 
-      <button type="submit" className="submit-btn">Submit</button>
+      <button type="submit" className="any-btn">Submit</button>
     </form>
       <div>
         <br />

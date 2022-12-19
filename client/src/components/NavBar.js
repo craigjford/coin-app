@@ -21,14 +21,14 @@ const NavBar = () =>  {
 
   return (
     <header>
-      <div>
+      <div className="navbar">
         {loggedIn ? (
-        <>
+        <> 
           <NavLink exact to="/">
               <button>Home</button>
           </NavLink>
-          <NavLink exact to="/customers">
-              <button>Customers</button>
+          <NavLink exact to="/dealers">
+              <button>Dealers</button>
           </NavLink>
           <button onClick={handleLogoutClick}>Logout</button>
         </>  
