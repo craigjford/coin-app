@@ -3,20 +3,26 @@ import { UserContext } from "../context/user";
 import { useHistory } from 'react-router-dom';
 import DealerList from './DealerList'
 
-const Dealers = ({ dealers }) => {
-  const { user, loggedIn } = useContext(UserContext);
+const Dealers = () => {
+  const { loggedIn, dealers } = useContext(UserContext);
   const history = useHistory();
-
-console.log('in Dealer = ', user);
 
   if (!loggedIn) {history.push('/')};
 
-  const dealerList = dealers.map((dealer) => <DealerList key={dealer.id} dealer={dealer}/>)
+  console.log('in Dealer = ', dealers);
+
+  const dealerList = dealers.map((dealer) => <DealerList key={dealer.id} dealer={dealer} /> );
 
   return (
     <div>
        <h1>Dealer List</h1>
+       {dealerList.length > 0 ? "" : <h2>You currently have No Transactions</h2> }
        {dealerList}
+       <br />
+       <hr />
+       <br />
+
+       <button className="any-btn">Make Transaction - Different Dealer</button>
     </div>  
   )  
 }

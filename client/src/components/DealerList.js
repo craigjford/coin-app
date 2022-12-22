@@ -1,9 +1,26 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import { UserContext } from '../context/user';
 
 const DealerList = ({ dealer }) => {
+  const { loggedIn } = useContext(UserContext)
 
-    
+  const history = useHistory();
+
+  if (!loggedIn) {history.push('/')};
+
+  const submitTrans = (e) => {
+    e.preventDefault();
+    console.log('event.target = ', e.target);
+  }
+
+  let dealerTransList = [];
+
+  if (dealer.transactions.length > 0) {
+      dealerTransList = dealer.transactions.map((tran) => <h3>Ounces: {tran.ounces}  -   Price: ${tran.price}</h3>);
+  }    
+  
+  // `/dealers/${dealer.id}/transactions/new`  
   return (
     <div>
         <hr />
@@ -14,13 +31,20 @@ const DealerList = ({ dealer }) => {
         <h4>State: {dealer.state}</h4>
         <h4>Phone: {dealer.phone}</h4>
         <h4>Email: {dealer.email}</h4>
-        <br />
+        <h2><u>Transactions</u></h2>
+        <div>
+            {dealerTransList.length === 0 && dealer.name > " " ? <h3>No Transactions Exist</h3> : dealerTransList}
+        </div>
+        <Link to={`/dealers/${dealer.id}/transactions/new`}>
+            <button className="any-btn">New Transaction</button>
+        </Link>
         <Link to={`/dealers/${dealer.id}/edit`}>
-            <button className="any-btn">Update Dealer</button>
+            <button className="any-btn" onClick={submitTrans}>Update Transactions</button>
         </Link>
         <Link to={"/transactions/new"}>
-            <button className="any-btn">Make Transaction</button>
+            <button className="any-btn" onClick={submitTrans}>Delete Transactions</button>
         </Link>
+        <br />
     </div>
   )
 }

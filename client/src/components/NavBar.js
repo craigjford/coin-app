@@ -28,7 +28,7 @@ const NavBar = () =>  {
               <button>Home</button>
           </NavLink>
           <NavLink exact to="/dealers">
-              <button>Dealers</button>
+              <button>My Transactions</button>
           </NavLink>
           <button onClick={handleLogoutClick}>Logout</button>
         </>  

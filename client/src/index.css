@@ -103,7 +103,7 @@ div.center-lis {
 
 .any-btn {
   background-color: maroon;
-  border: none;
+  border-width: 6px;
   color: white;
   padding: 10px 25px;
   text-align: center;

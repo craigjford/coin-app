@@ -26,7 +26,7 @@ const Login = () => {
     .then(res => {
       if (res.ok) {
           res.json().then(user => {
-            console.log('user = ', user);
+            console.log('in LOGIN - user = ', user);
             login(user);
             setUsername("");
             setPassword("");

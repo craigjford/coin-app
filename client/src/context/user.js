@@ -5,6 +5,9 @@ const UserContext = React.createContext();
 function UserProvider({ children }) {
     const [user, setUser] = useState({});
     const [loggedIn, setLoggedIn] = useState(false);
+    const [dealers, setDealers] = useState([{
+        transactions: []
+      }])
 
     useEffect(()=>{
         fetch('/me')
@@ -13,6 +16,7 @@ function UserProvider({ children }) {
                 res.json().then(user => {
                     setUser(user);
                     setLoggedIn(true);
+                    fetchDealers();
                 })
             }    
         })
@@ -26,6 +30,7 @@ function UserProvider({ children }) {
     const login = (user) => {
         setUser(user);
         setLoggedIn(true);
+        fetchDealers();
     }
     
     const logout = () => {
@@ -33,8 +38,17 @@ function UserProvider({ children }) {
         setLoggedIn(false);
     }
 
+    const fetchDealers = () => {
+        console.log('fetchDealers before');
+        fetch('/dealers')
+            .then(res => res.json())
+            .then(data => setDealers(data))
+
+        console.log('fetchDealers after');
+    }
+
     return (
-        <UserContext.Provider value={{ user, loggedIn, login, logout, signup }}>
+        <UserContext.Provider value={{ user, loggedIn, signup, login, logout, dealers }}>
             {children}
         </UserContext.Provider>
     );
