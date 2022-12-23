@@ -6,10 +6,13 @@ class TransactionsController < ApplicationController
     end    
 
     def create
-        transaction = Transaction.create(transaction_params)
+        byebug
+        transaction = current_user.transactions.create(transaction_params)
         if transaction.valid?
+            byebug
             render json: transaction, status: :created
         else
+            byebug
             render json: { error: "unable_to_create_transaction" }, status: :unprocessable_entity
         end
 
@@ -18,7 +21,7 @@ class TransactionsController < ApplicationController
     private
 
     def transaction_params 
-        params.permit(:user_id, :dealer_id, :ounces, :price)
+        params.permit(current_user, :dealer_id, :ounces, :price)
     end
 
     # def current_user  

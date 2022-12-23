@@ -20,7 +20,8 @@ const DealerList = ({ dealer }) => {
       dealerTransList = dealer.transactions.map((tran) => <h3>Ounces: {tran.ounces}  -   Price: ${tran.price}</h3>);
   }    
   
-  // `/dealers/${dealer.id}/transactions/new`  
+  console.log('dealer id = ', dealer.id);
+
   return (
     <div>
         <hr />
@@ -35,12 +36,15 @@ const DealerList = ({ dealer }) => {
         <div>
             {dealerTransList.length === 0 && dealer.name > " " ? <h3>No Transactions Exist</h3> : dealerTransList}
         </div>
-        <Link to={`/dealers/${dealer.id}/transactions/new`}>
-            <button className="any-btn">New Transaction</button>
-        </Link>
-        <Link to={`/dealers/${dealer.id}/edit`}>
+        <Link to={`/dealers/${dealer.id}/transactions`}>New Transaction</Link>
+        {/* <Link to={"/deal"}>
+            <button className="any-btn">New Transactions</button>
+        </Link> */}
+        {/* <Link to={`/deal`}>New Transaction</Link> */}
+
+        {/* <Link to={`/dealers/${dealer.id}/edit`}>
             <button className="any-btn" onClick={submitTrans}>Update Transactions</button>
-        </Link>
+        </Link> */}
         <Link to={"/transactions/new"}>
             <button className="any-btn" onClick={submitTrans}>Delete Transactions</button>
         </Link>

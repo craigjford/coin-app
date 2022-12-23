@@ -47,8 +47,25 @@ function UserProvider({ children }) {
         console.log('fetchDealers after');
     }
 
+    const addTrans = (transObj) => {
+        console.log('in addTrans = ', transObj)
+        console.log('in addTrans = ', transObj.id)
+
+        const updtDealerList = dealers.map((dlr) => {
+            if (dlr.id === transObj.dealer_id) {
+                console.log('in map - dlr.id = ', dlr.id)
+                dlr.transactions.push(transObj)
+                console.log('in map - dlr.ts = ', dlr.transactions)
+                return dlr;    
+            } else {
+                return dlr;
+            }
+        });  
+        setDealers(updtDealerList);
+    }
+
     return (
-        <UserContext.Provider value={{ user, loggedIn, signup, login, logout, dealers }}>
+        <UserContext.Provider value={{ user, loggedIn, signup, login, logout, dealers, addTrans }}>
             {children}
         </UserContext.Provider>
     );
