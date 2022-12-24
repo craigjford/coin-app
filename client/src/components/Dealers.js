@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { UserContext } from "../context/user";
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import DealerList from './DealerList'
 
 const Dealers = () => {
@@ -21,8 +21,9 @@ const Dealers = () => {
        <br />
        <hr />
        <br />
-
-       <button className="any-btn">Make Transaction - Different Dealer</button>
+       <Link to={"dealers/new"}>
+             <button className="any-btn">Make Transaction - Different Dealer</button>
+       </Link>
     </div>  
   )  
 }

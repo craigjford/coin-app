@@ -48,14 +48,9 @@ function UserProvider({ children }) {
     }
 
     const addTrans = (transObj) => {
-        console.log('in addTrans = ', transObj)
-        console.log('in addTrans = ', transObj.id)
-
         const updtDealerList = dealers.map((dlr) => {
             if (dlr.id === transObj.dealer_id) {
-                console.log('in map - dlr.id = ', dlr.id)
                 dlr.transactions.push(transObj)
-                console.log('in map - dlr.ts = ', dlr.transactions)
                 return dlr;    
             } else {
                 return dlr;
@@ -64,8 +59,43 @@ function UserProvider({ children }) {
         setDealers(updtDealerList);
     }
 
+    const deleteTrans = (dealerId, transId) => {
+
+        const updtDealerList = dealers.map((dealer) => {
+          if (dealer.id === dealerId) {
+              const newTransArr = dealer.transactions.filter((trans) => trans.id !== parseInt(transId))
+              dealer.transactions = newTransArr;
+              return dealer;
+          } else {
+              return dealer;
+          }
+        });
+        setDealers(updtDealerList); 
+    
+    }
+
+    const updateTrans = (transObj) => {
+
+        const updtDealerList = dealers.map((dealer) => {
+          if (dealer.id === transObj.dealer_id) {
+            const newTransArr = dealer.transactions.map((tran) => {
+              if (tran.id === transObj.id) {
+                return transObj;
+              } else {
+                return tran;
+              }
+            })  
+            dealer.transactions = newTransArr;
+            return dealer;
+          } else {
+            return dealer;
+          }
+        });
+        setDealers(updtDealerList); 
+      }
+
     return (
-        <UserContext.Provider value={{ user, loggedIn, signup, login, logout, dealers, addTrans }}>
+        <UserContext.Provider value={{ user, loggedIn, signup, login, logout, dealers, addTrans, deleteTrans, updateTrans }}>
             {children}
         </UserContext.Provider>
     );

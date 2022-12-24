@@ -1,17 +1,20 @@
 
 import React, { useContext, useState } from 'react';
 import { UserContext } from '../context/user';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 const TransactionForm = () => {
-    const { dealers, addTrans } = useContext(UserContext);
+    const { loggedIn, dealers, addTrans } = useContext(UserContext);
     const [errors, setErrors] = useState([]);
     const [formData, setFormData] = useState({
         ounces: 0,
         price: 0
       });
      
+    const history = useHistory();
     const params = useParams();
+
+    if (!loggedIn) { history.push('/') };
 
     const dealerArr = dealers.filter((dealer) => parseInt(dealer.id) === parseInt(params.dealer_id)) 
     const dealer = dealerArr[0];
@@ -50,7 +53,7 @@ const TransactionForm = () => {
             if (res.ok) {
                 res.json().then(data => addTrans(data))
             } else {
-                res.json().then(data => setErrors(data))
+                res.json().then(errors => setErrors(errors))
             }
         })        
     
@@ -69,6 +72,7 @@ const TransactionForm = () => {
             <h1><i>{dealer.name}</i></h1>
             <h3>Sales Rep: {dealer.sales_rep}</h3>
             <h3>Phone: {dealer.phone}</h3>
+            <h3>Email: {dealer.email}</h3>
             <br />
             <h2><u>Transactions</u></h2>
         <div>

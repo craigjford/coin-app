@@ -6,7 +6,10 @@ import LogIn from "./components/LogIn";
 import NavBar from "./components/NavBar";
 import Home from "./components/Home";
 import Dealers from "./components/Dealers";
+import DealerForm from "./components/DealerForm";
 import TransactionForm from "./components/TransactionForm";
+import TransactionDelete from "./components/TransactionDelete";
+import TransactionUpdate from "./components/TransactionUpdate";
 
 
 function App() {
@@ -20,9 +23,12 @@ function App() {
         <NavBar />
         {loggedIn ? (
           <Switch>
-            <Route exact path="/" component={Home} />
+            <Route exact path="/" component={Home} />=
             <Route exact path="/dealers" component={Dealers} />
-            <Route path="/dealers/:dealer_id/transactions" component={TransactionForm} />
+            <Route path="/dealers/new" component={DealerForm} />
+            <Route exact path="/dealers/:dealer_id/transactions" component={TransactionForm} />
+            <Route path="/dealers/:dealer_id/transactions/delete" component={TransactionDelete} />
+            <Route path="/dealers/:dealer_id/transactions/edit" component={TransactionUpdate} />
             <Route path="*">
                 <h1>404 - Page Not Found</h1>
                 <img src="https://bashooka.com/wp-content/uploads/2012/06/404-error-page-template-1.jpg" alt="Not Found" />

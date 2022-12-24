@@ -9,10 +9,10 @@ const DealerList = ({ dealer }) => {
 
   if (!loggedIn) {history.push('/')};
 
-  const submitTrans = (e) => {
-    e.preventDefault();
-    console.log('event.target = ', e.target);
-  }
+  // const submitTrans = (e) => {
+  //   e.preventDefault();
+  //   console.log('event.target = ', e.target);
+  // }
 
   let dealerTransList = [];
 
@@ -36,18 +36,15 @@ const DealerList = ({ dealer }) => {
         <div>
             {dealerTransList.length === 0 && dealer.name > " " ? <h3>No Transactions Exist</h3> : dealerTransList}
         </div>
-        <Link to={`/dealers/${dealer.id}/transactions`}>New Transaction</Link>
-        {/* <Link to={"/deal"}>
-            <button className="any-btn">New Transactions</button>
-        </Link> */}
-        {/* <Link to={`/deal`}>New Transaction</Link> */}
-
-        {/* <Link to={`/dealers/${dealer.id}/edit`}>
-            <button className="any-btn" onClick={submitTrans}>Update Transactions</button>
-        </Link> */}
-        <Link to={"/transactions/new"}>
-            <button className="any-btn" onClick={submitTrans}>Delete Transactions</button>
-        </Link>
+          <Link to={`/dealers/${dealer.id}/transactions`}>
+              <button className="any-btn">New Transactions</button>
+          </Link>
+          <Link to={`/dealers/${dealer.id}/transactions/delete`}>
+              <button className="any-btn">Delete Transactions</button>
+          </Link>
+          <Link to={`/dealers/${dealer.id}/transactions/edit`}>
+              <button className="any-btn">Update Transactions</button>
+          </Link>
         <br />
     </div>
   )
