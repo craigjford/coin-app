@@ -4,6 +4,7 @@ const UserContext = React.createContext();
 
 function UserProvider({ children }) {
     const [user, setUser] = useState({});
+    const [loading, setLoading] = useState(true);
     const [loggedIn, setLoggedIn] = useState(false);
     const [dealers, setDealers] = useState([{
         transactions: []
@@ -39,12 +40,12 @@ function UserProvider({ children }) {
     }
 
     const fetchDealers = () => {
-        console.log('fetchDealers before');
         fetch('/dealers')
             .then(res => res.json())
-            .then(data => setDealers(data))
-
-        console.log('fetchDealers after');
+            .then(data => {
+                setDealers(data)
+                setLoading(false)
+            })    
     }
 
     const addTrans = (transObj) => {
@@ -94,8 +95,14 @@ function UserProvider({ children }) {
         setDealers(updtDealerList); 
       }
 
+    const addDealer = (dealerObj) => {
+        dealerObj.transactions = []; 
+        const updtDealerList = [...dealers, dealerObj];
+        setDealers(updtDealerList)
+    }
+
     return (
-        <UserContext.Provider value={{ user, loggedIn, signup, login, logout, dealers, addTrans, deleteTrans, updateTrans }}>
+        <UserContext.Provider value={{ user, loading, loggedIn, signup, login, logout, dealers, addTrans, deleteTrans, updateTrans, addDealer }}>
             {children}
         </UserContext.Provider>
     );

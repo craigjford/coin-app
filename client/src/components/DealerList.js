@@ -9,15 +9,10 @@ const DealerList = ({ dealer }) => {
 
   if (!loggedIn) {history.push('/')};
 
-  // const submitTrans = (e) => {
-  //   e.preventDefault();
-  //   console.log('event.target = ', e.target);
-  // }
-
   let dealerTransList = [];
 
   if (dealer.transactions.length > 0) {
-      dealerTransList = dealer.transactions.map((tran) => <h3>Ounces: {tran.ounces}  -   Price: ${tran.price}</h3>);
+      dealerTransList = dealer.transactions.map((tran) => <h3 key={tran.id}>Ounces: {tran.ounces}  -   Price: ${tran.price}</h3>);
   }    
   
   console.log('dealer id = ', dealer.id);

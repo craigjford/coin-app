@@ -6,7 +6,7 @@ const Login = () => {
   const { loggedIn, login } = useContext(UserContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState("");
+  const [errors, setErrors] = useState([]);
   const history = useHistory();
 
   console.log('in Login - loggedIn = ', loggedIn);
@@ -26,7 +26,6 @@ const Login = () => {
     .then(res => {
       if (res.ok) {
           res.json().then(user => {
-            console.log('in LOGIN - user = ', user);
             login(user);
             setUsername("");
             setPassword("");
@@ -37,7 +36,7 @@ const Login = () => {
       }  
     })  
   }   
-
+  
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -66,9 +65,9 @@ const Login = () => {
       <div>
           <br />
           <br />
-          <>
-            {errors.error}
-          </>
+          <ul>
+              {errors ? errors.map((e) => (<li key={e}>{e}</li>)) : null}
+          </ul>
       </div>
     </div>
   );

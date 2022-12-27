@@ -6,8 +6,8 @@ const TransactionUpdate = () => {
     const { loggedIn, dealers, updateTrans } = useContext(UserContext);
     const [errors, setErrors] = useState([]);
     const [formData, setFormData] = useState({
-        ounces: 0,
-        price: 0
+        ounces: "",
+        price: ""
       });
 
       const history = useHistory();
@@ -32,7 +32,7 @@ const TransactionUpdate = () => {
         dlrTrans = dealer.transactions.map((trans) => {
           return (
             <div>
-                <label>
+                <label key={trans.id}>
                     <input type="radio" name="selected-tran" value={trans.id} checked={false} onChange={getSelectedTrans} />
                          Ounces: {trans.ounces}  -  Price: ${trans.price}
                 </label> 
@@ -52,18 +52,7 @@ const TransactionUpdate = () => {
       }
   
       const handleUpdateTrans = (e) => {
-          e.preventDefault();     
-
-        //   fetch(`/dealers/${formData.dealer_id}/transactions/${formData.id}`, {
-        //       method: 'PATCH',
-        //       headers: { 'Content-Type': 'application/json'},
-        //       body: JSON.stringify({ 
-        //           ounces: formData.ounces,
-        //           price: formData.price
-        //       }),
-        //   })
-        //       .then((res) => res.json())
-        //       .then((data) => updateTrans(data));   
+          e.preventDefault();        
 
         fetch(`/dealers/${formData.dealer_id}/transactions/${formData.id}`, {
             method: 'PATCH',
@@ -82,8 +71,8 @@ const TransactionUpdate = () => {
         });
 
           const clearInput = {
-              ounces: 0,
-              price: 0
+              ounces: "",
+              price: ""
           }      
           setFormData(clearInput);    
       }
@@ -101,16 +90,16 @@ const TransactionUpdate = () => {
             <form onSubmit={handleUpdateTrans}>
                 <label id="formlabel" htmlFor="ounces">Ounces: </label>
                     <input
-                    type="number"
-                    id="update-intfield"
+                    type="text"
+                    id="ounces"
                     name="ounces"
                     onChange={handleChange}
                     value={formData.ounces}
                     />
                 <label id="formlabel" htmlFor="price">Price </label>
                     <input
-                    type="number"
-                    id="update-intfield"
+                    type="text"
+                    id="price"
                     name="price"
                     onChange={handleChange}
                     value={formData.price}
@@ -120,7 +109,9 @@ const TransactionUpdate = () => {
                 <button type="submit" className="any-btn">Submit</button>
                 <br />
                 <br />
-                {errors ? errors.map((e) => (<div>{e}</div>)) : null}
+                <ul>
+                    {errors ? errors.map((e) => (<li key={e}>{e}</li>)) : null}
+                </ul>
             </form>
             <br />
             <div>

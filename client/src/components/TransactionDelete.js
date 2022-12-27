@@ -26,7 +26,7 @@ const TransactionDelete = () => {
         dlrTrans = dealer.transactions.map((trans) => {
           return (
             <div>
-                <label>
+                <label key={trans.id}>
                     <input type="radio" name="selected-tran" value={trans.id} onChange={getSelectedTrans} />
                          Ounces: {trans.ounces}  - Price: ${trans.price}
                 </label> 

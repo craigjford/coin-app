@@ -7,8 +7,8 @@ const TransactionForm = () => {
     const { loggedIn, dealers, addTrans } = useContext(UserContext);
     const [errors, setErrors] = useState([]);
     const [formData, setFormData] = useState({
-        ounces: 0,
-        price: 0
+        ounces: "",
+        price: ""
       });
      
     const history = useHistory();
@@ -21,14 +21,12 @@ const TransactionForm = () => {
     let dlrTrans = "";
 
     if (dealer.transactions.length >  0) {
-        dlrTrans = dealer.transactions.map((tran) => <h3>Ounces: {tran.ounces}  -  Price: ${tran.price}</h3>)
+        dlrTrans = dealer.transactions.map((tran) => <h3 key={tran.id}>Ounces: {tran.ounces}  -  Price: ${tran.price}</h3>)
     }  
 
     const handleChange = (e) => {
         let name = e.target.name;
         let value = e.target.value;
-    
-        value = parseInt(value)
    
         setFormData({
           ...formData,
@@ -58,8 +56,8 @@ const TransactionForm = () => {
         })        
     
         const clearInput = {
-          ounces: 0,
-          price: 0
+          ounces: "",
+          price: ""
         }
 
         setFormData(clearInput);
@@ -81,16 +79,16 @@ const TransactionForm = () => {
         <form onSubmit={handleSubmit}>
             <label id="formlabel" htmlFor="ounces">Ounces: </label>
                 <input
-                type="number"
-                id="update-intfield"
+                type="text"
+                id="ounces"
                 name="ounces"
                 onChange={handleChange}
                 value={formData.ounces}
                 />
             <label id="formlabel" htmlFor="price">Price </label>
                 <input
-                type="number"
-                id="update-intfield"
+                type="text"
+                id="price"
                 name="price"
                 onChange={handleChange}
                 value={formData.price}
@@ -100,7 +98,9 @@ const TransactionForm = () => {
             <button type="submit" className="submit-btn">Submit</button>
             <br />
             <br />
-            {errors ? errors.map((e) => (<div>{e}</div>)) : null}
+            <ul>
+                {errors ? errors.map((e) => (<li key={e}>{e}</li>)) : null}
+            </ul>
         </form>
       </div> 
     )   
