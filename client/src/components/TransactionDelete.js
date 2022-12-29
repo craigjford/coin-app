@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { UserContext } from '../context/user';
 
 const TransactionDelete = () => {
-    // const [errors, setErrors] = useState([]);
+    const [errors, setErrors] = useState([]);
     const { loggedIn, dealers, deleteTrans } = useContext(UserContext);
 
     const history = useHistory();
@@ -15,18 +15,18 @@ const TransactionDelete = () => {
     const dealer = dealerArr[0];
 
     let transId;
-  
+
     const getSelectedTrans = (e) => {
         transId = parseInt(e.target.value);
     }
 
     let dlrTrans = "";
-  
+
     if (dealer.transactions.length >  0) {
         dlrTrans = dealer.transactions.map((trans) => {
           return (
-            <div>
-                <label key={trans.id}>
+            <div key={trans.id}>
+                <label>
                     <input type="radio" name="selected-tran" value={trans.id} onChange={getSelectedTrans} />
                          Ounces: {trans.ounces}  - Price: ${trans.price}
                 </label> 
@@ -40,12 +40,18 @@ const TransactionDelete = () => {
         console.log('handleDeleteTrans - dealer.id = ', dealer.id);
         console.log('handleDeleteTrans - transId = ', transId);
 
-        fetch(`/dealers/${dealer.id}/transactions/${transId}`, {
-            method: 'DELETE'
-        })
-        .then(deleteTrans(dealer.id, transId))
-    }
+        fetch(`/transactions/${transId}`, {
+          method: "DELETE",
+        }).then((res) => {
+          if (res.ok) {
+              deleteTrans(dealer.id, transId);            
+          } else {
+             res.json().then(error => setErrors(errors))
+          }
+        });
 
+    }
+    console.log('in Trans Delete5');
       return (
         <div>
           <h1>Delete Transaction</h1>
@@ -60,6 +66,9 @@ const TransactionDelete = () => {
             {dlrTrans ?  dlrTrans : <h3>No Transactions Exist</h3>}
           </div> 
           <br />
+          <div>
+              {errors}
+          </div>
           <br />
           <button className="any-btn" type="button" onClick={handleDeleteTrans}>Delete</button> 
         </div>

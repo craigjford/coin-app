@@ -5,9 +5,9 @@ Rails.application.routes.draw do
   post "/login", to: "sessions#create"
   delete "/logout", to: "sessions#destroy"
 
-  resources :dealers, only: [:index, :create] do
-    resources :transactions, only: [:index, :create, :destroy, :update]
-  end
+  resources :dealers, only: [:index, :create] 
+  
+  resources :transactions, only: [:index, :create, :destroy, :update]  
 
   get '*path',
       to: 'fallback#index',

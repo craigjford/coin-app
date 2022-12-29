@@ -7,6 +7,7 @@ const TransactionForm = () => {
     const { loggedIn, dealers, addTrans } = useContext(UserContext);
     const [errors, setErrors] = useState([]);
     const [formData, setFormData] = useState({
+        dealer_id: 0,
         ounces: "",
         price: ""
       });
@@ -18,6 +19,7 @@ const TransactionForm = () => {
 
     const dealerArr = dealers.filter((dealer) => parseInt(dealer.id) === parseInt(params.dealer_id)) 
     const dealer = dealerArr[0];
+    formData.dealer_id = dealer.id;
     let dlrTrans = "";
 
     if (dealer.transactions.length >  0) {
@@ -36,13 +38,14 @@ const TransactionForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-    
-        fetch(`/dealers/${params.dealer_id}/transactions`, {
+
+        fetch(`/transactions`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+            dealer_id: dealer.id,
             ounces: formData.ounces,
             price: formData.price
           })
@@ -56,6 +59,7 @@ const TransactionForm = () => {
         })        
     
         const clearInput = {
+          dealer_id: 0,
           ounces: "",
           price: ""
         }
@@ -85,7 +89,7 @@ const TransactionForm = () => {
                 onChange={handleChange}
                 value={formData.ounces}
                 />
-            <label id="formlabel" htmlFor="price">Price </label>
+            <label id="formlabel" htmlFor="price">Price: </label>
                 <input
                 type="text"
                 id="price"

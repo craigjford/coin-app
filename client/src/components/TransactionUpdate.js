@@ -1,38 +1,40 @@
 import React, { useState, useContext } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { UserContext } from '../context/user';
 
 const TransactionUpdate = () => {
-    const { loggedIn, dealers, updateTrans } = useContext(UserContext);
+    const { loggedIn, updateTrans, dealers } = useContext(UserContext);
     const [errors, setErrors] = useState([]);
-    const [formData, setFormData] = useState({
-        ounces: "",
-        price: ""
-      });
+    const [transId, setTransId] = useState(0);
+    const [ounces, setOunces] = useState("");
+    const [price, setPrice] = useState("");
 
-      const history = useHistory();
-      const params = useParams();
+    const history = useHistory();
+    const params = useParams();
   
-      if (!loggedIn) { history.push('/') };
+    if (!loggedIn) { history.push('/') };
 
-      const dealerArr = dealers.filter((dealer) => parseInt(dealer.id) === parseInt(params.dealer_id)) 
-      const dealer = dealerArr[0];
-  
-      let transId;
-      let dlrTrans = "";
+    const dealerArr = dealers.filter((dealer) => parseInt(dealer.id) === parseInt(params.dealer_id)) 
+    const dealer = dealerArr[0];
 
-      const getSelectedTrans = (e) => {
-          transId = e.target.value;
-          let tranArr = dealer.transactions.filter((trans) => { return trans.id === parseInt(transId)});
-          let formData = tranArr[0];
-          setFormData(formData);
-      }
+    console.log('Trans Update = ', dealer);
 
-      if (dealer.transactions.length > 0) {
-        dlrTrans = dealer.transactions.map((trans) => {
-          return (
-            <div>
-                <label key={trans.id}>
+    const getSelectedTrans = (e) => {
+          let tranId = e.target.value;
+          let tranArr = dealer.transactions.filter((tran) => { return tran.id === parseInt(tranId)});
+          let transObj = tranArr[0];
+          setTransId(transObj.id)
+          setOunces(transObj.ounces)
+          setPrice(transObj.price)
+    }
+
+    let dlrTrans = [];
+
+    if (dealer.transactions.length > 0) {
+       dlrTrans = dealer.transactions.map((trans) => {
+        return (
+            <div key={trans.id}>
+                <label>
                     <input type="radio" name="selected-tran" value={trans.id} checked={false} onChange={getSelectedTrans} />
                          Ounces: {trans.ounces}  -  Price: ${trans.price}
                 </label> 
@@ -41,42 +43,33 @@ const TransactionUpdate = () => {
           )
         })
     }
-   
-      const handleChange = (event) => {
-          const name = event.target.name;
-          let value = event.target.value;
-          setFormData({
-            ...formData,
-            [name]: value,
-          });
-      }
   
-      const handleUpdateTrans = (e) => {
+    const handleUpdateTrans = (e) => {
           e.preventDefault();        
-
-        fetch(`/dealers/${formData.dealer_id}/transactions/${formData.id}`, {
+          console.log('Update - trans id = ', transId);
+          console.log('Update - ounces = ', ounces);
+          console.log('Update - price = ', price)  
+          fetch(`/transactions/${transId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json'},
             body: JSON.stringify({ 
-                ounces: formData.ounces,
-                price: formData.price
+                ounces: ounces,
+                price: price
             }),
-        })
-        .then((res) => {
+            })
+            .then((res) => {
             if (res.ok) {
-                res.json().then((data) => updateTrans(data))
+                res.json().then((data) => {
+                    updateTrans(data)
+                    setTransId(0)
+                    setOunces("")
+                    setPrice("")
+                })
             } else {
                 res.json().then((errors) => setErrors(errors))
             }      
-        });
-
-          const clearInput = {
-              ounces: "",
-              price: ""
-          }      
-          setFormData(clearInput);    
-      }
-
+            });
+    }
 
       return (
         <div>
@@ -93,16 +86,16 @@ const TransactionUpdate = () => {
                     type="text"
                     id="ounces"
                     name="ounces"
-                    onChange={handleChange}
-                    value={formData.ounces}
+                    onChange={(e) => setOunces(e.target.value)}
+                    value={ounces}
                     />
-                <label id="formlabel" htmlFor="price">Price </label>
+                <label id="formlabel" htmlFor="price">Price: </label>
                     <input
                     type="text"
                     id="price"
                     name="price"
-                    onChange={handleChange}
-                    value={formData.price}
+                    onChange={(e) => setPrice(e.target.value)}
+                    value={price}
                     />
                 <br />
                 <br /> 

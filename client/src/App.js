@@ -14,7 +14,6 @@ import TransactionUpdate from "./components/TransactionUpdate";
 
 function App() {
   const { loading, loggedIn } = useContext(UserContext);
-  
 
   console.log('in App loggedIn = ', loggedIn);
 
@@ -29,7 +28,7 @@ function App() {
             <Route exact path="/" component={Home} />=
             <Route exact path="/dealers" component={Dealers} />
             <Route path="/dealers/new" component={DealerForm} />
-            <Route exact path="/dealers/:dealer_id/transactions" component={TransactionForm} />
+            <Route exact path="/dealers/:dealer_id/transactions/new" component={TransactionForm} />
             <Route path="/dealers/:dealer_id/transactions/delete" component={TransactionDelete} />
             <Route path="/dealers/:dealer_id/transactions/edit" component={TransactionUpdate} />
             <Route path="*">

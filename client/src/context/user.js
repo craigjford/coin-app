@@ -8,7 +8,8 @@ function UserProvider({ children }) {
     const [loggedIn, setLoggedIn] = useState(false);
     const [dealers, setDealers] = useState([{
         transactions: []
-      }])
+      }]);
+ 
 
     useEffect(()=>{
         fetch('/me')
@@ -102,7 +103,7 @@ function UserProvider({ children }) {
     }
 
     return (
-        <UserContext.Provider value={{ user, loading, loggedIn, signup, login, logout, dealers, addTrans, deleteTrans, updateTrans, addDealer }}>
+        <UserContext.Provider value={{ user, loading, loggedIn, signup, login, logout, dealers, addDealer, addTrans, deleteTrans, updateTrans }}>
             {children}
         </UserContext.Provider>
     );

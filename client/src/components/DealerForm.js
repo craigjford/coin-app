@@ -71,7 +71,7 @@ const DealerForm = () => {
   return (
     <>
       <div>
-        <h1>EditDealerForm</h1>
+        <h1>Add Dealer</h1>
       </div>
       <div>
           <form onSubmit={handleSubmit}>

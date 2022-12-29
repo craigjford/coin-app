@@ -2,9 +2,11 @@ class TransactionsController < ApplicationController
 
     rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
 
+    before_action :authorize
+
     def index   
         transactions = Transaction.all
-        render json: transactions, include: :dealer ,status: :ok
+        render json: transactions, include: :dealer, status: :ok
     end    
 
     def create
@@ -17,13 +19,13 @@ class TransactionsController < ApplicationController
     end
 
     def destroy
-        transaction = current_user.transactions.find(params[:id])
+        transaction = find_transaction
         transaction.destroy
         head :no_content
     end
 
     def update  
-        transaction = current_user.transactions.find(params[:id])
+        transaction = find_transaction
         transaction.update(transaction_params)
         if transaction.valid?
             render json: transaction, status: :accepted
@@ -34,6 +36,10 @@ class TransactionsController < ApplicationController
 
     private
 
+    def find_transaction
+        current_user.transactions.find(params[:id])
+    end
+
     def transaction_params 
         params.permit(current_user, :dealer_id, :ounces, :price)
     end
@@ -42,8 +48,8 @@ class TransactionsController < ApplicationController
         render json: { error: "Transaction not found" }, status: :not_found
     end
 
-    # def current_user  
-    #     User.find_by(id: session[:user_id])
-    # end
+    def authorize   
+        return render json: { error: "User not authorized" }, status: :unauthorized unless session.include?(:user_id)
+    end
 
 end

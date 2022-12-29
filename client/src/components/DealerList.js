@@ -8,14 +8,12 @@ const DealerList = ({ dealer }) => {
   const history = useHistory();
 
   if (!loggedIn) {history.push('/')};
-
+ 
   let dealerTransList = [];
 
   if (dealer.transactions.length > 0) {
       dealerTransList = dealer.transactions.map((tran) => <h3 key={tran.id}>Ounces: {tran.ounces}  -   Price: ${tran.price}</h3>);
   }    
-  
-  console.log('dealer id = ', dealer.id);
 
   return (
     <div>
@@ -31,7 +29,7 @@ const DealerList = ({ dealer }) => {
         <div>
             {dealerTransList.length === 0 && dealer.name > " " ? <h3>No Transactions Exist</h3> : dealerTransList}
         </div>
-          <Link to={`/dealers/${dealer.id}/transactions`}>
+          <Link to={`/dealers/${dealer.id}/transactions/new`}>  
               <button className="any-btn">New Transactions</button>
           </Link>
           <Link to={`/dealers/${dealer.id}/transactions/delete`}>
