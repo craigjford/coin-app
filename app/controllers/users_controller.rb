@@ -32,7 +32,6 @@ class UsersController < ApplicationController
         params.permit(:username, :password, :password_confirmation, :city, :state, :phone, :address, :email)
     end
 
-
     # def render_not_found(error)
     #     render json: { error: "#{error.model} not found" }, status: :not_found
     # end

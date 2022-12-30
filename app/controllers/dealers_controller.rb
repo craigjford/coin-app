@@ -5,7 +5,7 @@ class DealersController < ApplicationController
 
     before_action :authorize
 
-    def index    
+    def index  
         dealers = current_user.dealers.distinct
         render json: dealers, include: :transactions, status: :ok
     end
@@ -19,6 +19,10 @@ class DealersController < ApplicationController
 
     def dealer_params 
         params.permit(:name, :sales_rep, :address, :city, :state, :phone, :email)
+    end
+
+    def current_user  
+        User.find_by(id: session[:user_id])
     end
 
     def authorize   

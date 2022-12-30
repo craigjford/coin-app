@@ -6,7 +6,7 @@ const Login = () => {
   const { loggedIn, login } = useContext(UserContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState([]);
+  const [errors, setErrors] = useState("");
   const history = useHistory();
 
   console.log('in Login - loggedIn = ', loggedIn);
@@ -32,7 +32,10 @@ const Login = () => {
             history.push('/');
           })
       } else { 
-          res.json().then(err => setErrors(err))  
+          res.json().then(err => {
+            console.log('errors = ', err.error)
+            setErrors(err.error)
+         })  
       }  
     })  
   }   
@@ -65,9 +68,9 @@ const Login = () => {
       <div>
           <br />
           <br />
-          <ul>
-              {errors ? errors.map((e) => (<li key={e}>{e}</li>)) : null}
-          </ul>
+          <div>
+              {errors ? <h2>{errors}</h2> : null}
+          </div>
       </div>
     </div>
   );

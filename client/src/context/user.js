@@ -20,7 +20,9 @@ function UserProvider({ children }) {
                     setLoggedIn(true);
                     fetchDealers();
                 })
-            }    
+            } else {
+                setLoading(false)
+            }   
         })
     },[])
 
@@ -38,6 +40,7 @@ function UserProvider({ children }) {
     const logout = () => {
         setUser({});
         setLoggedIn(false);
+        setDealers([]);
     }
 
     const fetchDealers = () => {

@@ -40,6 +40,10 @@ class TransactionsController < ApplicationController
         current_user.transactions.find(params[:id])
     end
 
+    def current_user  
+        User.find_by(id: session[:user_id])
+    end
+
     def transaction_params 
         params.permit(current_user, :dealer_id, :ounces, :price)
     end

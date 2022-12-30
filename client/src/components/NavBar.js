@@ -25,23 +25,23 @@ const NavBar = () =>  {
         {loggedIn ? (
         <> 
           <NavLink exact to="/">
-              <button>Home</button>
+              <button className="any-btn">Home</button>
           </NavLink>
           <NavLink exact to="/dealers">
-              <button>My Transactions</button>
+              <button className="any-btn">My Transactions</button>
           </NavLink>
-          <button onClick={handleLogoutClick}>Logout</button>
+          <button className="any-btn" onClick={handleLogoutClick}>Logout</button>
         </>  
         ) : (
           <>
             <NavLink exact to="/">
-              <button>Home</button>
+              <button className="any-btn">Home</button>
             </NavLink>
             <NavLink to="/login">
-              <button>Login</button>
+              <button className="any-btn">Login</button>
             </NavLink>
             <NavLink to="/signup">
-              <button>Signup</button>
+              <button className="any-btn">Signup</button>
             </NavLink>
           </>
         )}
