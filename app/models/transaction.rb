@@ -3,7 +3,7 @@ class Transaction < ApplicationRecord
   belongs_to :dealer
 
   # validates :ounces, :price, prescence: true
-  # validates :ounces, numericality: { greater_than: 0 }
-  # validates :price, numericality: { greater_than: 200 }
+  # validates :ounces, numericality: { only_integer: true }
+  # validates :price, numericality: { only_integer: true }
 
 end

@@ -12,11 +12,6 @@ class SessionsController < ApplicationController
     end
   end
 
-  # def show
-  #   message = session[:user_id]
-  #   render json: { error: message }, status: :ok
-  # end
-
   # DELETE '/logout'
     def destroy
         if session[:user_id] == nil

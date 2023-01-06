@@ -67,7 +67,8 @@ const TransactionForm = () => {
         setFormData(clearInput);
       }
 
-
+    console.log('in transaction add - errors = ', errors);
+      
     return (
       <div> 
             <h1 className="formheader">Please Enter A Transaction for</h1>

@@ -1,21 +1,19 @@
 class TransactionsController < ApplicationController
 
     rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
+    rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity
 
     before_action :authorize
 
+    # for testing purposes only
     def index   
         transactions = Transaction.all
         render json: transactions, include: :dealer, status: :ok
     end    
 
     def create
-        transaction = current_user.transactions.create(transaction_params)
-        if transaction.valid?
-            render json: transaction, status: :created
-        else
-            render json: { error: "unable_to_create_transaction" }, status: :unprocessable_entity
-        end
+        transaction = current_user.transactions.create!(transaction_params)
+        render json: transaction, status: :created
     end
 
     def destroy
@@ -26,12 +24,8 @@ class TransactionsController < ApplicationController
 
     def update  
         transaction = find_transaction
-        transaction.update(transaction_params)
-        if transaction.valid?
-            render json: transaction, status: :accepted
-        else
-            render json: { error: "unable_to_update_transaction" }, status: :unprocessable_entity           
-        end
+        transaction.update!(transaction_params)
+        render json: transaction, status: :accepted
     end
 
     private
@@ -50,6 +44,10 @@ class TransactionsController < ApplicationController
 
     def render_not_found_response
         render json: { error: "Transaction not found" }, status: :not_found
+    end
+
+    def render_unprocessable_entity(invalid)
+        return render json: { error: invalid.record.errors.full_messages }, status: :unprocessable_entity
     end
 
     def authorize   

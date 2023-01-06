@@ -33,7 +33,6 @@ const Login = () => {
           })
       } else { 
           res.json().then(err => {
-            console.log('errors = ', err.error)
             setErrors(err.error)
          })  
       }  
