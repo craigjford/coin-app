@@ -6,12 +6,21 @@ class DealersController < ApplicationController
     before_action :authorize
 
     def index  
+        render json: Dealer.all, status: :ok
+    end
+
+    def myindex  
         dealers = current_user.dealers.distinct
         render json: dealers, include: :transactions, status: :ok
     end
 
+    # def create    
+    #     dealer = current_user.dealers.create!(dealer_params)
+    #     render json: dealer, status: :created
+    # end
+
     def create    
-        dealer = current_user.dealers.create!(dealer_params)
+        dealer = Dealer.create!(dealer_params)
         render json: dealer, status: :created
     end
 

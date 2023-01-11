@@ -6,6 +6,7 @@ function UserProvider({ children }) {
     const [user, setUser] = useState({});
     const [loading, setLoading] = useState(true);
     const [loggedIn, setLoggedIn] = useState(false);
+    const [allDealers, setAllDealers] = useState([]);
     const [dealers, setDealers] = useState([{
         transactions: []
       }]);
@@ -44,7 +45,7 @@ function UserProvider({ children }) {
     }
 
     const fetchDealers = () => {
-        fetch('/dealers')
+        fetch('/mydealers')
             .then(res => res.json())
             .then(data => {
                 setDealers(data)
@@ -52,16 +53,36 @@ function UserProvider({ children }) {
             })    
     }
 
+    const fetchAllDealers = () => {
+        fetch('/dealers')
+            .then(res => res.json())
+            .then(data => {
+                setAllDealers(data)
+            })    
+    }
+
     const addTrans = (transObj) => {
+        let foundDealer = false;
         const updtDealerList = dealers.map((dlr) => {
             if (dlr.id === transObj.dealer_id) {
+                foundDealer = true
                 dlr.transactions.push(transObj)
                 return dlr;    
             } else {
                 return dlr;
             }
-        });  
-        setDealers(updtDealerList);
+        }); 
+
+        if (foundDealer) {
+            setDealers(updtDealerList);
+        } else {
+            let newDealerList = allDealers.filter((d) => d.id === transObj.dealer_id);
+            let newDealer = newDealerList[0];
+            newDealer.transactions = [];
+            newDealer.transactions.push(transObj);
+            updtDealerList.push(newDealer);
+            setDealers(updtDealerList); 
+        }
     }
 
     const deleteTrans = (dealerId, transId) => {
@@ -100,13 +121,17 @@ function UserProvider({ children }) {
       }
 
     const addDealer = (dealerObj) => {
-        dealerObj.transactions = []; 
         const updtDealerList = [...dealers, dealerObj];
         setDealers(updtDealerList)
     }
 
+    const addAllDealer = (dealerObj) => {
+        const updtAllDealerList = [...allDealers, dealerObj];
+        setAllDealers(updtAllDealerList)
+    }
+
     return (
-        <UserContext.Provider value={{ user, loading, loggedIn, signup, login, logout, dealers, addDealer, addTrans, deleteTrans, updateTrans }}>
+        <UserContext.Provider value={{ user, loading, loggedIn, signup, login, logout, dealers, addDealer, allDealers, fetchAllDealers, addAllDealer , addTrans, deleteTrans, updateTrans }}>
             {children}
         </UserContext.Provider>
     );

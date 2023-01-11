@@ -30,6 +30,9 @@ const NavBar = () =>  {
           <NavLink exact to="/dealers">
               <button className="any-btn">My Transactions</button>
           </NavLink>
+          <NavLink exact to="/alldealers">
+              <button className="any-btn">All Dealers</button>
+          </NavLink>
           <button className="any-btn" onClick={handleLogoutClick}>Logout</button>
         </>  
         ) : (

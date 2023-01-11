@@ -21,8 +21,8 @@ const Dealers = () => {
        <br />
        <hr />
        <br />
-       <Link to={"dealers/new"}>
-             <button className="any-btn">Add Dealer</button>
+       <Link to={`/transactions/new`}>  
+          <button className="any-btn">Add Transaction</button>
        </Link>
     </div>  
   )  

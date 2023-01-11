@@ -37,8 +37,6 @@ const TransactionDelete = () => {
     }  
 
     const handleDeleteTrans = () => {
-        console.log('handleDeleteTrans - dealer.id = ', dealer.id);
-        console.log('handleDeleteTrans - transId = ', transId);
 
         fetch(`/transactions/${transId}`, {
           method: "DELETE",

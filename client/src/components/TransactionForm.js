@@ -1,39 +1,49 @@
 
 import React, { useContext, useState } from 'react';
 import { UserContext } from '../context/user';
-import { useParams, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const TransactionForm = () => {
-    const { loggedIn, dealers, addTrans } = useContext(UserContext);
+    const { loggedIn, dealers, allDealers, fetchAllDealers, addTrans } = useContext(UserContext);
     const [errors, setErrors] = useState([]);
     const [formData, setFormData] = useState({
-        dealer_id: 0,
+        dealerId: 0,
         ounces: "",
         price: ""
       });
      
     const history = useHistory();
-    const params = useParams();
 
     if (!loggedIn) { history.push('/') };
 
-    const dealerArr = dealers.filter((dealer) => parseInt(dealer.id) === parseInt(params.dealer_id)) 
-    const dealer = dealerArr[0];
-    formData.dealer_id = dealer.id;
-    let dlrTrans = "";
-
-    if (dealer.transactions.length >  0) {
-        dlrTrans = dealer.transactions.map((tran) => <h3 key={tran.id}>Ounces: {tran.ounces}  -  Price: ${tran.price}</h3>)
-    }  
+    if (allDealers.length === 0) {
+      fetchAllDealers();
+    }
 
     const handleChange = (e) => {
         let name = e.target.name;
         let value = e.target.value;
-   
+
         setFormData({
           ...formData,
           [name]: value
         });
+    }
+
+    let transDlrs = [];
+
+    if (allDealers.length > 0) {
+       transDlrs = allDealers.map((dlr) => {
+        return (
+            <div key={dlr.id}>
+                <label>
+                    <input type="radio" name="dealerId" value={dlr.id} onChange={handleChange} />
+                         Name: {dlr.name} 
+                </label> 
+                <br /> 
+            </div>
+          )
+        })
     }
 
     const handleSubmit = (e) => {
@@ -45,44 +55,65 @@ const TransactionForm = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            dealer_id: dealer.id,
+            dealer_id: formData.dealerId,
             ounces: formData.ounces,
             price: formData.price
           })
         })   
         .then(res => {
             if (res.ok) {
-                res.json().then(data => addTrans(data))
+                res.json().then(data => {
+                  addTrans(data)
+                  // history.push('/dealers')
+              })
             } else {
                 res.json().then(errors => setErrors(errors))
             }
         })        
     
         const clearInput = {
-          dealer_id: 0,
+          dealerId: 0,
           ounces: "",
           price: ""
         }
 
         setFormData(clearInput);
       }
+   
+  
+    let dealerArr = allDealers.filter((d) => d.id === parseInt(formData.dealerId)) 
+    let newDlr = dealerArr[0];
+    let selDealerArr = dealers.filter((selD) => selD.id === parseInt(formData.dealerId))
+    let selDlr = selDealerArr[0];
+    let existTrans;
+    if (selDealerArr.length > 0) {
+        existTrans = selDlr.transactions.map((tr) => <div key={tr.id}> Ounces: {tr.ounces}  - Price: ${tr.price}</div>)
+    } else {
+        existTrans = [];
+    }    
 
-    console.log('in transaction add - errors = ', errors);
-      
     return (
       <div> 
-            <h1 className="formheader">Please Enter A Transaction for</h1>
-            <h1><i>{dealer.name}</i></h1>
-            <h3>Sales Rep: {dealer.sales_rep}</h3>
-            <h3>Phone: {dealer.phone}</h3>
-            <h3>Email: {dealer.email}</h3>
+            <h1 className="formheader">Transaction Add</h1>
             <br />
-            <h2><u>Transactions</u></h2>
-        <div>
-            {dlrTrans === '' ? <h3>No Transactions Exist</h3> : dlrTrans}
-        </div>
-        <form onSubmit={handleSubmit}>
-            <label id="formlabel" htmlFor="ounces">Ounces: </label>
+            <h2>Please Select a Dealer</h2>
+            <div>
+                {transDlrs}
+            </div>
+          {formData.dealerId > 0 ? (
+          <div>  
+            <h2><i>{newDlr.name}</i></h2>
+            <h3>Sales Rep: {newDlr.sales_rep}</h3>
+            <h3>Phone: {newDlr.phone}</h3>
+            <h3>Email: {newDlr.email}</h3>
+            <br />
+            <>
+              <h2><u>Transactions</u></h2>
+              {existTrans.length > 0 ?  existTrans : <h3>No Transactions Exist</h3>}
+            </>
+            <br />
+            <form onSubmit={handleSubmit}>
+              <label id="formlabel" htmlFor="ounces">Ounces: </label>
                 <input
                 type="text"
                 id="ounces"
@@ -90,7 +121,7 @@ const TransactionForm = () => {
                 onChange={handleChange}
                 value={formData.ounces}
                 />
-            <label id="formlabel" htmlFor="price">Price: </label>
+              <label id="formlabel" htmlFor="price">Price: </label>
                 <input
                 type="text"
                 id="price"
@@ -100,16 +131,20 @@ const TransactionForm = () => {
                 />
             <br />
             <br /> 
-            <button type="submit" className="any-btn">Submit</button>
+            <button type="submit" className="any-btn">Submit Transaction</button>
             <br />
+            <br />
+          </form>  
+          </div>  
+            ) :  (<br />)
+          }
             <br />
             <ul>
                 {errors ? errors.map((e) => (<li key={e}>{e}</li>)) : null}
             </ul>
-        </form>
+
       </div> 
     )   
 }  
-
 
 export default TransactionForm;

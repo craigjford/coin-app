@@ -2,8 +2,8 @@ import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { UserContext } from '../context/user';
 
-const DealerForm = () => {
-    const { loggedIn, addDealer } = useContext(UserContext);
+const AllDealerForm = () => {
+    const { loggedIn, addAllDealer } = useContext(UserContext);
     const [errors, setErrors] = useState([]);
     const history = useHistory();    
     const [formData, setFormData] = useState({
@@ -45,9 +45,9 @@ const DealerForm = () => {
       .then(res => {
           if (res.ok) {
               res.json().then(dealerObj => {
-                  addDealer(dealerObj)
+                  addAllDealer(dealerObj)
                   initializeFormfields()
-                  history.push('/dealers')
+                  history.push('/alldealers')
               }) 
           } else {
               res.json().then(err => setErrors(err.errors))
@@ -55,7 +55,7 @@ const DealerForm = () => {
         })
     }
 
-    console.log('in Dealer Form - errors = ', errors);
+    // console.log('in Dealer Form - errors = ', errors);
     
     const initializeFormfields = () => { 
         const clearInput = {
@@ -161,4 +161,4 @@ const DealerForm = () => {
   )
 }
 
-export default DealerForm;
+export default AllDealerForm;
