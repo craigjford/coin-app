@@ -4,19 +4,32 @@ import { useHistory, Link } from 'react-router-dom';
 import DealerList from './DealerList'
 
 const Dealers = () => {
-  const { loggedIn, dealers } = useContext(UserContext);
+  const { user, loggedIn, dealers } = useContext(UserContext);
   const history = useHistory();
 
   if (!loggedIn) {history.push('/')};
 
-  console.log('in Dealer = ', dealers);
+  let userDealerList = [];
 
-  const dealerList = dealers.map((dealer) => <DealerList key={dealer.id} dealer={dealer} /> );
+
+  if (dealers.length > 0) {
+      userDealerList = dealers.map((userDealer) => {
+        const newTransArr = userDealer.transactions.filter((t) => t.user_id === user.id)
+        userDealer.transactions = newTransArr
+        return userDealer
+    })
+  }
+
+  let dealerList = [];
+ 
+  if (userDealerList.length > 0) {
+     dealerList = userDealerList.map((dealer) => <DealerList key={dealer.id} dealer={dealer} /> );
+  } 
 
   return (
     <div>
        <h1>Dealer List</h1>
-       {dealerList.length > 0 ? "" : <h2>You currently have No Transactions</h2> }
+       {dealerList.length > 0 ? null : <h2>You currently have No Transactions With Any Dealer</h2> }
        {dealerList}
        <br />
        <hr />

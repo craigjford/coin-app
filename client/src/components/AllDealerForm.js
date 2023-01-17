@@ -54,8 +54,6 @@ const AllDealerForm = () => {
           }
         })
     }
-
-    // console.log('in Dealer Form - errors = ', errors);
     
     const initializeFormfields = () => { 
         const clearInput = {

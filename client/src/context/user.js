@@ -11,7 +11,6 @@ function UserProvider({ children }) {
         transactions: []
       }]);
  
-
     useEffect(()=>{
         fetch('/me')
         .then(res => {
@@ -44,7 +43,8 @@ function UserProvider({ children }) {
         setDealers([]);
     }
 
-    const fetchDealers = () => {
+    const fetchDealers = (user) => {
+
         fetch('/mydealers')
             .then(res => res.json())
             .then(data => {
@@ -58,10 +58,12 @@ function UserProvider({ children }) {
             .then(res => res.json())
             .then(data => {
                 setAllDealers(data)
+                setLoading(false)
             })    
     }
 
     const addTrans = (transObj) => {
+
         let foundDealer = false;
         const updtDealerList = dealers.map((dlr) => {
             if (dlr.id === transObj.dealer_id) {
@@ -83,21 +85,22 @@ function UserProvider({ children }) {
             updtDealerList.push(newDealer);
             setDealers(updtDealerList); 
         }
+
     }
 
     const deleteTrans = (dealerId, transId) => {
-
-        const updtDealerList = dealers.map((dealer) => {
+        
+        const updtDealerList = dealers.map((dealer) => { 
           if (dealer.id === dealerId) {
               const newTransArr = dealer.transactions.filter((trans) => trans.id !== parseInt(transId))
-              dealer.transactions = newTransArr;
-              return dealer;
+              dealer.transactions = newTransArr
+              return dealer  
           } else {
               return dealer;
           }
         });
-        setDealers(updtDealerList); 
-    
+        const dealerWithTrans = updtDealerList.filter((d) => d.transactions.length > 0)
+        setDealers(dealerWithTrans);
     }
 
     const updateTrans = (transObj) => {
@@ -131,7 +134,7 @@ function UserProvider({ children }) {
     }
 
     return (
-        <UserContext.Provider value={{ user, loading, loggedIn, signup, login, logout, dealers, addDealer, allDealers, fetchAllDealers, addAllDealer , addTrans, deleteTrans, updateTrans }}>
+        <UserContext.Provider value={{ user, setDealers, loading, loggedIn, signup, login, logout, dealers, addDealer, allDealers, fetchAllDealers, addAllDealer , addTrans, deleteTrans, updateTrans }}>
             {children}
         </UserContext.Provider>
     );

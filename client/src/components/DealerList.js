@@ -12,7 +12,7 @@ const DealerList = ({ dealer }) => {
   let dealerTransList = [];
 
   if (dealer.transactions.length > 0) {
-      dealerTransList = dealer.transactions.map((tran) => <h3 key={tran.id}>Ounces: {tran.ounces}  -   Price: ${tran.price}</h3>);
+      dealerTransList = dealer.transactions.map((tran) => <h3 key={tran.id}>Ounces: {tran.num_ounces}  -   Price: ${tran.price_per_ounce}  -  Total Cost: ${tran.total_cost}</h3>);
   }    
 
   return (
@@ -27,7 +27,7 @@ const DealerList = ({ dealer }) => {
         <h4>Email: {dealer.email}</h4>
         <h2><u>Transactions</u></h2>
         <div>
-            {dealerTransList.length === 0 && dealer.name > " " ? <h3>No Transactions Exist</h3> : dealerTransList}
+            {dealerTransList.length === 0 && dealer.name > " " ? <h3>No Transactions Exist with This Dealer</h3> : dealerTransList}
         </div>
           <Link to={`/dealers/${dealer.id}/transactions/delete`}>
               <button className="any-btn">Delete Transactions</button>

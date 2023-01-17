@@ -1,3 +1,4 @@
+
 import React, { useContext, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { UserContext } from '../context/user';
@@ -11,46 +12,55 @@ const TransactionDelete = () => {
 
     if (!loggedIn) { history.push('/') };
 
-    const dealerArr = dealers.filter((dealer) => parseInt(dealer.id) === parseInt(params.dealer_id)) 
-    const dealer = dealerArr[0];
+    let dealerArr =  []
+    let dealer = {}
 
-    let transId;
+    if (dealers.length > 0) {
+        dealerArr = dealers.filter((dealer) => parseInt(dealer.id) === parseInt(params.dealer_id)) 
+        dealer = dealerArr[0];
+    }
+    
+    let transId = 0;
 
     const getSelectedTrans = (e) => {
         transId = parseInt(e.target.value);
     }
 
     let dlrTrans = "";
-
-    if (dealer.transactions.length >  0) {
-        dlrTrans = dealer.transactions.map((trans) => {
-          return (
-            <div key={trans.id}>
-                <label>
-                    <input type="radio" name="selected-tran" value={trans.id} onChange={getSelectedTrans} />
-                         Ounces: {trans.ounces}  - Price: ${trans.price}
-                </label> 
-                <br /> 
-            </div>
-          )
-        })
-    }  
-
+    
+    if (dealerArr.length > 0) {
+      if (dealer.transactions.length >  0) {
+          dlrTrans = dealer.transactions.map((trans) => {
+            return (
+              <div key={trans.id}>
+                  <label>
+                      <input type="radio" name="selected-tran" value={trans.id} onChange={getSelectedTrans} />
+                          Ounces: {trans.num_ounces}  -  Price: ${trans.price_per_ounce}   -   Total Cost: ${trans.total_cost}
+                  </label> 
+                  <br /> 
+              </div>
+            )
+          })
+      }  
+    }
+     
+     
     const handleDeleteTrans = () => {
-
         fetch(`/transactions/${transId}`, {
           method: "DELETE",
         }).then((res) => {
           if (res.ok) {
               deleteTrans(dealer.id, transId);            
           } else {
-             res.json().then(error => setErrors(errors))
+             res.json().then(errors => setErrors(errors.error))
           }
         });
-
     }
-    console.log('in Trans Delete5');
+      
       return (
+        <>
+        <main>
+        {dealerArr.length > 0 ? (
         <div>
           <h1>Delete Transaction</h1>
           <h1><i>{dealer.name}</i></h1>
@@ -60,9 +70,7 @@ const TransactionDelete = () => {
             <br />
             <h2><u>Transactions</u></h2>
           <br />
-          <div>
-            {dlrTrans ?  dlrTrans : <h3>No Transactions Exist</h3>}
-          </div> 
+            {dlrTrans}
           <br />
           <div>
               {errors}
@@ -70,7 +78,20 @@ const TransactionDelete = () => {
           <br />
           <button className="any-btn" type="button" onClick={handleDeleteTrans}>Delete</button> 
         </div>
-      )
+        ) : (
+          <>
+            <h2><u>Transactions</u></h2>
+            <br />
+            <div>
+               <h3>No Transactions Exist for This Dealer</h3>
+            </div> 
+            <br />
+          </>
+        )
+        }
+        </main>
+      </>
+    )  
 }
 
 export default TransactionDelete;

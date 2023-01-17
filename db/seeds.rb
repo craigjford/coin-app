@@ -24,9 +24,11 @@ d6 = Dealer.create(name: "D & S Gold Exchange", sales_rep: "Jeff Bosh", address:
 
 puts "🤠 Seeding transactions..."
 
-Transaction.create(user_id: u2.id, dealer_id: d2.id, ounces: "3", price: "1750")
-Transaction.create(user_id: u3.id, dealer_id: d3.id, ounces: "1", price: "1500")
-Transaction.create(user_id: u3.id, dealer_id: d3.id, ounces: "2", price: "1800")
-Transaction.create(user_id: u3.id, dealer_id: d4.id, ounces: "4", price: "1600")
+Transaction.create(user_id: u2.id, dealer_id: d2.id, num_ounces: 3, price_per_ounce: 1750)
+Transaction.create(user_id: u3.id, dealer_id: d2.id, num_ounces: 1, price_per_ounce: 1500)
+Transaction.create(user_id: u3.id, dealer_id: d3.id, num_ounces: 2, price_per_ounce: 1800)
+Transaction.create(user_id: u3.id, dealer_id: d6.id, num_ounces: 9, price_per_ounce: 1111)
+Transaction.create(user_id: u4.id, dealer_id: d2.id, num_ounces: 6, price_per_ounce: 1111)
+Transaction.create(user_id: u4.id, dealer_id: d3.id, num_ounces: 6, price_per_ounce: 1111)
 
 puts "✅ Done seeding!"

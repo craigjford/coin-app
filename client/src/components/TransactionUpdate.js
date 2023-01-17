@@ -6,8 +6,8 @@ const TransactionUpdate = () => {
     const { loggedIn, updateTrans, dealers } = useContext(UserContext);
     const [errors, setErrors] = useState([]);
     const [transId, setTransId] = useState(0);
-    const [ounces, setOunces] = useState("");
-    const [price, setPrice] = useState("");
+    const [numOunces, setNumOunces] = useState(0);
+    const [pricePerOunce, setPricePerOunce] = useState(0);
 
     const history = useHistory();
     const params = useParams();
@@ -17,15 +17,16 @@ const TransactionUpdate = () => {
     const dealerArr = dealers.filter((dealer) => parseInt(dealer.id) === parseInt(params.dealer_id)) 
     const dealer = dealerArr[0];
 
-    console.log('Trans Update = ', dealer);
-
     const getSelectedTrans = (e) => {
+          if (errors.length > 0) {
+              setErrors([])
+          }
           let tranId = e.target.value;
           let tranArr = dealer.transactions.filter((tran) => { return tran.id === parseInt(tranId)});
           let transObj = tranArr[0];
-          setTransId(transObj.id)
-          setOunces(transObj.ounces)
-          setPrice(transObj.price)
+          setTransId(parseInt(transObj.id))
+          setNumOunces(parseInt(transObj.num_ounces))
+          setPricePerOunce(parseInt(transObj.price_per_ounce))
     }
 
     let dlrTrans = [];
@@ -36,7 +37,7 @@ const TransactionUpdate = () => {
             <div key={trans.id}>
                 <label>
                     <input type="radio" name="selected-tran" value={trans.id} checked={false} onChange={getSelectedTrans} />
-                         Ounces: {trans.ounces}  -  Price: ${trans.price}
+                         Ounces: {trans.num_ounces}  -  Price: ${trans.price_per_ounce}  -  Total Cost: ${trans.total_cost}
                 </label> 
                 <br /> 
             </div>
@@ -45,16 +46,14 @@ const TransactionUpdate = () => {
     }
   
     const handleUpdateTrans = (e) => {
-          e.preventDefault();        
-          console.log('Update - trans id = ', transId);
-          console.log('Update - ounces = ', ounces);
-          console.log('Update - price = ', price)  
+          e.preventDefault();  
+                
           fetch(`/transactions/${transId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json'},
             body: JSON.stringify({ 
-                ounces: ounces,
-                price: price
+                num_ounces: numOunces,
+                price_per_ounce: pricePerOunce
             }),
             })
             .then((res) => {
@@ -62,11 +61,12 @@ const TransactionUpdate = () => {
                 res.json().then((data) => {
                     updateTrans(data)
                     setTransId(0)
-                    setOunces("")
-                    setPrice("")
+                    setNumOunces("")
+                    setPricePerOunce("")
+                    setErrors([])
                 })
             } else {
-                res.json().then((errors) => setErrors(errors))
+                res.json().then((errors) => setErrors(errors.error))
             }      
             });
     }
@@ -86,30 +86,31 @@ const TransactionUpdate = () => {
                     type="text"
                     id="ounces"
                     name="ounces"
-                    onChange={(e) => setOunces(e.target.value)}
-                    value={ounces}
+                    onChange={(e) => setNumOunces(parseInt(e.target.value))}
+                    value={numOunces}
                     />
                 <label id="formlabel" htmlFor="price">Price: </label>
                     <input
                     type="text"
                     id="price"
                     name="price"
-                    onChange={(e) => setPrice(e.target.value)}
-                    value={price}
+                    onChange={(e) => setPricePerOunce(parseInt(e.target.value))}
+                    value={pricePerOunce}
                     />
                 <br />
                 <br /> 
                 <button type="submit" className="any-btn">Submit</button>
                 <br />
                 <br />
-                <ul>
-                    {errors ? errors.map((e) => (<li key={e}>{e}</li>)) : null}
-                </ul>
             </form>
             <br />
             <div>
-                {dlrTrans ?  dlrTrans : <h3>No Transactions Exist</h3>}
+                {dlrTrans ?  dlrTrans : <h3>No Transactions Exist For This Dealer</h3>}
             </div>
+            <br />
+            <ul>
+                {errors ? errors.map((e) => (<li key={e}>{e}</li>)) : null}
+            </ul>
         </div>
       )
 }

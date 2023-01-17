@@ -1,20 +1,21 @@
-
 import React, { useContext, useState } from 'react';
 import { UserContext } from '../context/user';
 import { useHistory } from 'react-router-dom';
 
 const TransactionForm = () => {
-    const { loggedIn, dealers, allDealers, fetchAllDealers, addTrans } = useContext(UserContext);
+    const { loggedIn, loading, dealers, allDealers, fetchAllDealers, addTrans } = useContext(UserContext);
     const [errors, setErrors] = useState([]);
+    const [dealerId, setDealerId] = useState()
     const [formData, setFormData] = useState({
-        dealerId: 0,
-        ounces: "",
-        price: ""
+        num_ounces: 0,
+        price_per_ounce: 0
       });
      
     const history = useHistory();
 
     if (!loggedIn) { history.push('/') };
+
+    if(loading) return <h1>Loading</h1>;
 
     if (allDealers.length === 0) {
       fetchAllDealers();
@@ -22,12 +23,18 @@ const TransactionForm = () => {
 
     const handleChange = (e) => {
         let name = e.target.name;
-        let value = e.target.value;
+        let value = parseInt(e.target.value);
 
-        setFormData({
-          ...formData,
-          [name]: value
-        });
+        if (name === "dealerId") {
+            setDealerId(value);
+            setErrors([]);
+        } else { 
+
+          setFormData({
+            ...formData,
+            [name]: value
+          });  
+        }  
     }
 
     let transDlrs = [];
@@ -55,43 +62,43 @@ const TransactionForm = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            dealer_id: formData.dealerId,
-            ounces: formData.ounces,
-            price: formData.price
+            dealer_id: parseInt(dealerId),
+            num_ounces: parseInt(formData.num_ounces),
+            price_per_ounce: parseInt(formData.price_per_ounce)
           })
         })   
         .then(res => {
             if (res.ok) {
                 res.json().then(data => {
                   addTrans(data)
-                  // history.push('/dealers')
+                  setErrors([])
+                  const clearInput = {
+                    num_ounces: 0,
+                    price_per_ounce: 0
+                  }
+                  setFormData(clearInput)
               })
             } else {
-                res.json().then(errors => setErrors(errors))
+                res.json().then(errors => {
+                  setErrors(errors.error)
+                })
             }
         })        
-    
-        const clearInput = {
-          dealerId: 0,
-          ounces: "",
-          price: ""
-        }
+        
+    }
 
-        setFormData(clearInput);
-      }
-   
-  
-    let dealerArr = allDealers.filter((d) => d.id === parseInt(formData.dealerId)) 
+
+    let dealerArr = allDealers.filter((d) => d.id === parseInt(dealerId)) 
     let newDlr = dealerArr[0];
-    let selDealerArr = dealers.filter((selD) => selD.id === parseInt(formData.dealerId))
+    let selDealerArr = dealers.filter((selD) => selD.id === parseInt(dealerId))
     let selDlr = selDealerArr[0];
     let existTrans;
     if (selDealerArr.length > 0) {
-        existTrans = selDlr.transactions.map((tr) => <div key={tr.id}> Ounces: {tr.ounces}  - Price: ${tr.price}</div>)
+        existTrans = selDlr.transactions.map((tr) => <div key={tr.id}> Ounces: {tr.num_ounces}  - Price: ${tr.price_per_ounce}  -  Total Cost: ${tr.total_cost}</div>)
     } else {
         existTrans = [];
     }    
-
+  
     return (
       <div> 
             <h1 className="formheader">Transaction Add</h1>
@@ -100,7 +107,7 @@ const TransactionForm = () => {
             <div>
                 {transDlrs}
             </div>
-          {formData.dealerId > 0 ? (
+          {dealerId > 0 ? (  
           <div>  
             <h2><i>{newDlr.name}</i></h2>
             <h3>Sales Rep: {newDlr.sales_rep}</h3>
@@ -109,25 +116,25 @@ const TransactionForm = () => {
             <br />
             <>
               <h2><u>Transactions</u></h2>
-              {existTrans.length > 0 ?  existTrans : <h3>No Transactions Exist</h3>}
+              {existTrans.length > 0 ?  existTrans : <h3>No Transactions Exist With This Dealer</h3>}
             </>
             <br />
             <form onSubmit={handleSubmit}>
-              <label id="formlabel" htmlFor="ounces">Ounces: </label>
+              <label id="formlabel" htmlFor="num_ounces">Ounces: </label>
                 <input
-                type="text"
-                id="ounces"
-                name="ounces"
+                type="number"
+                id="num_ounces"
+                name="num_ounces"
                 onChange={handleChange}
-                value={formData.ounces}
+                value={formData.num_ounces}
                 />
-              <label id="formlabel" htmlFor="price">Price: </label>
+              <label id="formlabel" htmlFor="price_per_ounce">Price: </label>
                 <input
-                type="text"
-                id="price"
-                name="price"
+                type="number"
+                id="price_per_ounce"
+                name="price_per_ounce"
                 onChange={handleChange}
-                value={formData.price}
+                value={formData.price_per_ounce}
                 />
             <br />
             <br /> 

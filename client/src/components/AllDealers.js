@@ -4,16 +4,16 @@ import { useHistory, Link } from 'react-router-dom';
 import AllDealerList from './AllDealerList'
 
 const AllDealers = () => {
-  const { loggedIn, allDealers, fetchAllDealers } = useContext(UserContext);
+  const { loggedIn, loading, allDealers, fetchAllDealers } = useContext(UserContext);
   const history = useHistory();
 
   if (!loggedIn) {history.push('/')};
 
+  if(loading) return <h1>Loading</h1>;
+
   if (allDealers.length === 0) {
       fetchAllDealers();
   }
-
-  console.log('in allDealer = ', allDealers);
 
   const allDealerList = allDealers.map((ad) => <AllDealerList key={ad.id} ad={ad} /> );
 

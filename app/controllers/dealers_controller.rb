@@ -3,21 +3,17 @@ class DealersController < ApplicationController
 
     rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity
 
-    before_action :authorize
+    # before_action :authorize
 
     def index  
-        render json: Dealer.all, status: :ok
+        dealers = Dealer.all
+        render json: dealers, each_serializer: DealerAllSerializer
     end
 
     def myindex  
         dealers = current_user.dealers.distinct
-        render json: dealers, include: :transactions, status: :ok
+        render json: dealers, status: :ok
     end
-
-    # def create    
-    #     dealer = current_user.dealers.create!(dealer_params)
-    #     render json: dealer, status: :created
-    # end
 
     def create    
         dealer = Dealer.create!(dealer_params)

@@ -6,6 +6,7 @@ class User < ApplicationRecord
     validates :username, :password, :phone, :email, presence: true
     validates :username, uniqueness: true
     validates :phone, length: { is: 10 }
+    validates :phone, numericality: { only_integer: true}
 
 end
 

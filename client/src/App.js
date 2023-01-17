@@ -1,4 +1,4 @@
-import React, { useContext} from "react";
+import React, { useContext } from "react";
 import { UserContext } from "./context/user";
 import { Switch, Route } from "react-router-dom";
 import UserSignUpForm from "./components/UserSignUpForm";
@@ -15,8 +15,7 @@ import TransactionUpdate from "./components/TransactionUpdate";
 
 function App() {
   const { loading, loggedIn } = useContext(UserContext);
-
-  console.log('in App loggedIn = ', loggedIn);
+  
 
   if(loading) return <h1>Loading</h1>
 

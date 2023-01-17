@@ -6,8 +6,6 @@ const NavBar = () =>  {
   const { loggedIn, logout } = useContext(UserContext);
   const history = useHistory();
 
-  console.log('in Navbar - user = ', loggedIn)
-
   const handleLogoutClick = () => {
     fetch("/logout", 
     { method: "DELETE" })

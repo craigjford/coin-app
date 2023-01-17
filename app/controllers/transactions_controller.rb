@@ -3,11 +3,11 @@ class TransactionsController < ApplicationController
     rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
     rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity
 
-    before_action :authorize
+    # before_action :authorize
 
     # for testing purposes only
-    def index   
-        transactions = Transaction.all
+    def index
+        transactions = current_user.transactions
         render json: transactions, include: :dealer, status: :ok
     end    
 
@@ -39,7 +39,7 @@ class TransactionsController < ApplicationController
     end
 
     def transaction_params 
-        params.permit(current_user, :dealer_id, :ounces, :price)
+        params.permit(current_user, :dealer_id, :num_ounces, :price_per_ounce)
     end
 
     def render_not_found_response

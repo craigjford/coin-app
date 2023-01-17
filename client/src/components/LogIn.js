@@ -3,13 +3,11 @@ import { UserContext } from "../context/user";
 import { useHistory } from 'react-router-dom'
 
 const Login = () => {
-  const { loggedIn, login } = useContext(UserContext);
+  const { login } = useContext(UserContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState("");
   const history = useHistory();
-
-  console.log('in Login - loggedIn = ', loggedIn);
 
   const handleSubmit = (event) => {
     event.preventDefault();

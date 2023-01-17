@@ -8,7 +8,7 @@ const Home = () => {
     
   return (
     <div>
-        <h1>Welcome to Your Home Page, {user.username}!</h1>
+        <h1>Welcome {user.username} to Your Home Page!</h1>
         <br />
         <br />
         <h2>Address:  {user.address}</h2>
