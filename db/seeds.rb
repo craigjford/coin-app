@@ -8,6 +8,10 @@
 
 # puts "🤠 Seeding users..."
 
+# Transaction.destroy_all
+# Dealer.destroy_all
+# User.destroy_all
+
 # u1 = User.create(username: "ann", password: "ann", address: "91 E River Rd", city: "Rumson", state: "NJ", phone: "7323205798", email: "aa62@aol.com")
 # u2 = User.create(username: "jay", password: "jay", address: "1140 Ballantine Rd", city: "Middletown", state: "NJ", phone: "7326414496", email: "jldr@bkook.com")
 # u3 = User.create(username: "paul", password: "paul", address: "77 Helena St", city: "Wall", state: "NJ", phone: "7326465112", email: "popper72@gmail.com")

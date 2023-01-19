@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
       current_user = user
       render json: user, status: :ok
     else  
-      render json: { error: "Invalid username or password" }, status: :unauthorized
+      render json: { error: "Username/password does not exist - Have you Signed up?" }, status: :unauthorized
     end
   end
 

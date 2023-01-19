@@ -44,7 +44,6 @@ function UserProvider({ children }) {
     }
 
     const fetchDealers = (user) => {
-
         fetch('/mydealers')
             .then(res => res.json())
             .then(data => {
