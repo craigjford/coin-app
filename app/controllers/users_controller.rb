@@ -1,11 +1,4 @@
 class UsersController < ApplicationController
-    
-    rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity
-
-    def index               
-        users = User.all
-        render json: users, status: :ok
-    end
 
     def show    
         if session[:user_id] == nil
@@ -32,13 +25,6 @@ class UsersController < ApplicationController
         params.permit(:username, :password, :password_confirmation, :city, :state, :phone, :address, :email)
     end
 
-    # def render_not_found(error)
-    #     render json: { error: "#{error.model} not found" }, status: :not_found
-    # end
-
-    def render_unprocessable_entity(invalid) 
-        render json: { errors: invalid.record.errors.full_messages }, status: :unprocessable_entity
-    end
 
 end
 

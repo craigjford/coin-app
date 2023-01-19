@@ -1,15 +1,6 @@
 class TransactionsController < ApplicationController
 
-    rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
-    rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity
-
-    # before_action :authorize
-
-    # for testing purposes only
-    def index
-        transactions = current_user.transactions
-        render json: transactions, include: :dealer, status: :ok
-    end    
+    before_action :authorize 
 
     def create
         transaction = current_user.transactions.create!(transaction_params)
@@ -40,14 +31,6 @@ class TransactionsController < ApplicationController
 
     def transaction_params 
         params.permit(current_user, :dealer_id, :num_ounces, :price_per_ounce)
-    end
-
-    def render_not_found_response
-        render json: { error: "Transaction not found" }, status: :not_found
-    end
-
-    def render_unprocessable_entity(invalid)
-        return render json: { error: invalid.record.errors.full_messages }, status: :unprocessable_entity
     end
 
     def authorize   

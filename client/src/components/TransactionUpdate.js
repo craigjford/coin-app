@@ -4,10 +4,16 @@ import { UserContext } from '../context/user';
 
 const TransactionUpdate = () => {
     const { loggedIn, updateTrans, dealers } = useContext(UserContext);
-    const [errors, setErrors] = useState([]);
+    const [errors, setErrors] = useState([]);   
     const [transId, setTransId] = useState(0);
-    const [numOunces, setNumOunces] = useState(0);
-    const [pricePerOunce, setPricePerOunce] = useState(0);
+    const [numOunces, setNumOunces] = useState("");
+    const [pricePerOunce, setPricePerOunce] = useState("");
+
+    // console.log('Update - errors = ', errors);
+    // console.log('Update - transId = ', transId);
+    // console.log('Update - numOunces = ', numOunces);
+    // console.log('Update - pricePerOunce = ', pricePerOunce);
+    // console.log('Update - errors = ', errors);
 
     const history = useHistory();
     const params = useParams();
@@ -18,36 +24,50 @@ const TransactionUpdate = () => {
     const dealer = dealerArr[0];
 
     const getSelectedTrans = (e) => {
+   
           if (errors.length > 0) {
               setErrors([])
           }
-          let tranId = e.target.value;
+ 
+          let tranId = e.target.value; 
           let tranArr = dealer.transactions.filter((tran) => { return tran.id === parseInt(tranId)});
           let transObj = tranArr[0];
-          setTransId(parseInt(transObj.id))
-          setNumOunces(parseInt(transObj.num_ounces))
-          setPricePerOunce(parseInt(transObj.price_per_ounce))
+          setTransId(parseInt(transObj.id)); 
+          setNumOunces(parseInt(transObj.num_ounces));
+          setPricePerOunce(parseInt(transObj.price_per_ounce)); 
     }
 
     let dlrTrans = [];
 
-    if (dealer.transactions.length > 0) {
+    if (dealer.transactions.length > 0) {  
        dlrTrans = dealer.transactions.map((trans) => {
         return (
             <div key={trans.id}>
+              {transId > 0 ? (
+                <>
+                  <label>
+                    <input type="radio" name="selected-tran" value={trans.id} onChange={getSelectedTrans} />
+                        Ounces: {trans.num_ounces}  -  Price: ${trans.price_per_ounce}  -  Total Cost: ${trans.total_cost}
+                  </label>
+                  <br />
+                </>  
+            ) : (
+               <> 
                 <label>
                     <input type="radio" name="selected-tran" value={trans.id} checked={false} onChange={getSelectedTrans} />
-                         Ounces: {trans.num_ounces}  -  Price: ${trans.price_per_ounce}  -  Total Cost: ${trans.total_cost}
-                </label> 
-                <br /> 
-            </div>
-          )
-        })
+                        Ounces: {trans.num_ounces}  -  Price: ${trans.price_per_ounce}  -  Total Cost: ${trans.total_cost}
+                </label>
+                <br />
+              </>
+          )}
+          </div> 
+        )
+      })  
     }
   
     const handleUpdateTrans = (e) => {
           e.preventDefault();  
-                
+
           fetch(`/transactions/${transId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json'},
@@ -66,7 +86,9 @@ const TransactionUpdate = () => {
                     setErrors([])
                 })
             } else {
-                res.json().then((errors) => setErrors(errors.error))
+                res.json().then((errors) => { 
+                    setErrors(errors.errors)
+                })
             }      
             });
     }
@@ -86,7 +108,7 @@ const TransactionUpdate = () => {
                     type="text"
                     id="ounces"
                     name="ounces"
-                    onChange={(e) => setNumOunces(parseInt(e.target.value))}
+                    onChange={(e) => setNumOunces(e.target.value)}
                     value={numOunces}
                     />
                 <label id="formlabel" htmlFor="price">Price: </label>
@@ -94,12 +116,17 @@ const TransactionUpdate = () => {
                     type="text"
                     id="price"
                     name="price"
-                    onChange={(e) => setPricePerOunce(parseInt(e.target.value))}
+                    onChange={(e) => setPricePerOunce(e.target.value)}
                     value={pricePerOunce}
                     />
                 <br />
                 <br /> 
-                <button type="submit" className="any-btn">Submit</button>
+                { transId > 0 ? (
+                        <button type="submit" className="any-btn">Submit</button>
+                    ) : (
+                        null
+                    )
+                } 
                 <br />
                 <br />
             </form>
@@ -109,10 +136,10 @@ const TransactionUpdate = () => {
             </div>
             <br />
             <ul>
-                {errors ? errors.map((e) => (<li key={e}>{e}</li>)) : null}
+                {errors.length > 0 ? errors.map((e) => (<li style={{color:'red'}} key={e}>{e}</li>)) : null}
             </ul>
         </div>
       )
 }
 
-export default TransactionUpdate
+export default TransactionUpdate;

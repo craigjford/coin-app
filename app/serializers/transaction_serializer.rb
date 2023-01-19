@@ -6,5 +6,4 @@ class TransactionSerializer < ActiveModel::Serializer
        self.object.num_ounces.to_i * self.object.price_per_ounce.to_i
   end
 
-  # belongs_to :dealer
 end

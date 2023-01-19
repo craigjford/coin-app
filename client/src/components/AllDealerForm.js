@@ -151,7 +151,7 @@ const AllDealerForm = () => {
             <br />
             <br />
             <ul>
-                {errors ? errors.map(e => <li key={e}>{e}</li>) : ""}
+                {errors ? errors.map(e => <li style={{color:'red'}} key={e}>{e}</li>) : ""}
               </ul>    
           </form>
       </div>

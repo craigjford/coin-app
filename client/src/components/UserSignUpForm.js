@@ -59,7 +59,7 @@ const UserSignUpForm = () => {
     setEmail("");
   }  
 
-  const errorsList = errors.map((err) => <li key={err}>{err}</li>);
+  const errorsList = errors.map((err) => <li style={{color:'red'}} key={err}>{err}</li>);
 
   if (loggedIn) {return history.push('/')}
 

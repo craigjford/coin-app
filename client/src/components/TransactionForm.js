@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 const TransactionForm = () => {
     const { loggedIn, loading, dealers, allDealers, fetchAllDealers, addTrans } = useContext(UserContext);
     const [errors, setErrors] = useState([]);
-    const [dealerId, setDealerId] = useState()
+    const [dealerId, setDealerId] = useState();
     const [formData, setFormData] = useState({
         num_ounces: 0,
         price_per_ounce: 0
@@ -80,13 +80,12 @@ const TransactionForm = () => {
               })
             } else {
                 res.json().then(errors => {
-                  setErrors(errors.error)
+                  setErrors(errors.errors)
                 })
             }
         })        
         
     }
-
 
     let dealerArr = allDealers.filter((d) => d.id === parseInt(dealerId)) 
     let newDlr = dealerArr[0];
@@ -147,7 +146,7 @@ const TransactionForm = () => {
           }
             <br />
             <ul>
-                {errors ? errors.map((e) => (<li key={e}>{e}</li>)) : null}
+                {errors ? errors.map((e) => (<li style={{color:'red'}} key={e}>{e}</li>)) : null}
             </ul>
 
       </div> 

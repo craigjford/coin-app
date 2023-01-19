@@ -4,10 +4,12 @@ Rails.application.routes.draw do
   post "/signup", to: "users#create"
   post "/login", to: "sessions#create"
   delete "/logout", to: "sessions#destroy"
-  get "/mydealers", to: "dealers#myindex"
 
   # for testing
   get "/users", to: "users#index"
+
+  # this route is used to retrieve data relevant to the logged in user  
+  get "/mydealers", to: "dealers#myindex"
 
   resources :dealers, only: [:index, :create] 
 
