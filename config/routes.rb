@@ -6,9 +6,9 @@ Rails.application.routes.draw do
   delete "/logout", to: "sessions#destroy"
 
   # for testing
-  get "/users", to: "users#index"
+  # get "/users", to: "users#index"
 
-  # this route is used to retrieve data relevant to the logged in user  
+  # this route is used to retrieve dealers with associated transactions to the logged in user  
   get "/mydealers", to: "dealers#myindex"
 
   resources :dealers, only: [:index, :create] 

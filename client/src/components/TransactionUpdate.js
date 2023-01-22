@@ -9,12 +9,6 @@ const TransactionUpdate = () => {
     const [numOunces, setNumOunces] = useState("");
     const [pricePerOunce, setPricePerOunce] = useState("");
 
-    // console.log('Update - errors = ', errors);
-    // console.log('Update - transId = ', transId);
-    // console.log('Update - numOunces = ', numOunces);
-    // console.log('Update - pricePerOunce = ', pricePerOunce);
-    // console.log('Update - errors = ', errors);
-
     const history = useHistory();
     const params = useParams();
   
