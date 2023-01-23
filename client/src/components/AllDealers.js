@@ -4,14 +4,14 @@ import { useHistory, Link } from 'react-router-dom';
 import AllDealerList from './AllDealerList'
 
 const AllDealers = () => {
-  const { loggedIn, loading, allDealers, fetchAllDealers } = useContext(UserContext);
+  const { loggedIn, loading, allDealers, gotAllDealers, fetchAllDealers } = useContext(UserContext);
   const history = useHistory();
 
   if (!loggedIn) {history.push('/')};
 
   if(loading) return <h1>Loading</h1>;
 
-  if (allDealers.length === 0) {
+  if (gotAllDealers === false) {
       fetchAllDealers();
   }
 

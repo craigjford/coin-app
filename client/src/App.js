@@ -19,6 +19,8 @@ function App() {
 
   if(loading) return <h1>Loading</h1>
 
+
+
   return (
     <>
       <main>
@@ -42,10 +44,7 @@ function App() {
             <Route exact path="/" component={Home} />
             <Route path="/login" component={LogIn} />
             <Route path="/signup" component={UserSignUpForm} />
-            <Route path="*">
-                <h1>404 - Page Not Found</h1>
-                <img src="https://bashooka.com/wp-content/uploads/2012/06/404-error-page-template-1.jpg" alt="Not Found" />
-            </Route> 
+            <Route path="*" component={Home} />
           </Switch>
          )} 
       </main>

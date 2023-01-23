@@ -3,7 +3,7 @@ import { UserContext } from '../context/user';
 import { useHistory } from 'react-router-dom';
 
 const TransactionForm = () => {
-    const { loggedIn, loading, dealers, allDealers, fetchAllDealers, addTrans } = useContext(UserContext);
+    const { loggedIn, loading, dealers, allDealers, gotAllDealers, fetchAllDealers, addTrans } = useContext(UserContext);
     const [errors, setErrors] = useState([]);
     const [dealerId, setDealerId] = useState();
     const [formData, setFormData] = useState({
@@ -17,7 +17,7 @@ const TransactionForm = () => {
 
     if(loading) return <h1>Loading</h1>;
 
-    if (allDealers.length === 0) {
+    if (gotAllDealers === false) {
       fetchAllDealers();
     }
 

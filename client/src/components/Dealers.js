@@ -11,7 +11,6 @@ const Dealers = () => {
 
   let userDealerList = [];
 
-
   if (dealers.length > 0) {
       userDealerList = dealers.map((userDealer) => {
         const newTransArr = userDealer.transactions.filter((t) => t.user_id === user.id)
