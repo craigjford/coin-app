@@ -22,7 +22,7 @@ class UsersController < ApplicationController
     def user_by_phone_number
 
         #  Tom, I know this is a bit hockey, but I struggled to find a cleaner way to see if a string is numeric
-        
+
         input = params[:id]
         input_length = input.length
 
@@ -41,7 +41,11 @@ class UsersController < ApplicationController
 
         if is_integer
             users = User.where("phone LIKE ?", "#{input}%") 
-            render json: users, include: :transactions,  status: :ok
+            if users.count > 0
+                render json: users, include: :transactions,  status: :ok
+            else
+                render json: { message: "No Users Fit That Criteria"}, status: :not_found    
+            end
         else     
             render json: {error: "Input is required to be numeric" }, status: :bad_request    
         end
