@@ -26,6 +26,9 @@ const NavBar = () =>  {
               <button className="any-btn">Home</button>
           </NavLink>
           <NavLink exact to="/dealers">
+              <button className="any-btn">My Dealers</button>
+          </NavLink>
+          <NavLink exact to="/transactions">
               <button className="any-btn">My Transactions</button>
           </NavLink>
           <NavLink exact to="/alldealers">

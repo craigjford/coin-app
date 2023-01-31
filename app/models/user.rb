@@ -8,5 +8,15 @@ class User < ApplicationRecord
     validates :phone, length: { is: 10 }
     validates :phone, numericality: { only_integer: true}
 
+    def user_by_phone_number
+        byebug
+        input
+        phone = params[:phone]
+        if !phone.integer?
+           valid_number = false
+        end
+        valid_number
+    end
+
 end
 

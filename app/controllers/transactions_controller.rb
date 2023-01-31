@@ -2,6 +2,12 @@ class TransactionsController < ApplicationController
 
     before_action :authorize 
 
+    def index
+        #  transactions = current_user.transactions, each_serializer: TransactionAllSerializer
+        transactions = current_user.transactions
+        render json: transactions, status: :ok
+    end
+
     def create
         transaction = current_user.transactions.create!(transaction_params)
         render json: transaction, status: :created

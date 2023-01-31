@@ -8,7 +8,8 @@ function UserProvider({ children }) {
     const [loggedIn, setLoggedIn] = useState(false);
     const [gotAllDealers, setGotAllDealers] = useState(false);
     const [allDealers, setAllDealers] = useState([]);
-    const [dealers, setDealers] = useState([])
+    const [dealers, setDealers] = useState([]);
+    const [transactions, setTransactions] = useState([]);
  
     useEffect(()=>{
         fetch('/me')
@@ -61,6 +62,16 @@ function UserProvider({ children }) {
             })    
     }
 
+    const fetchMyTrans = () => {
+        fetch('/transactions')
+            .then(res => res.json())
+            .then(data => {
+                setTransactions(data)
+                setLoading(false)
+
+            })    
+    }
+
     const addTrans = (transObj) => {
 
         let foundDealer = false;
@@ -85,6 +96,10 @@ function UserProvider({ children }) {
             setDealers(updtDealerList); 
         }
 
+        // added code to keep transactions in state synced with database
+        const transUpdatedList = [...transactions, transObj] 
+        setTransactions(transUpdatedList)
+
     }
 
     const deleteTrans = (dealerId, transId) => {
@@ -100,6 +115,10 @@ function UserProvider({ children }) {
         });
         const dealerWithTrans = updtDealerList.filter((d) => d.transactions.length > 0)
         setDealers(dealerWithTrans);
+
+         // added code to keep transactions in state synced with database
+         const transUpdatedList = transactions.filter((t) => t.id !== transId)
+         setTransactions(transUpdatedList)
     }
 
     const updateTrans = (transObj) => {
@@ -120,6 +139,17 @@ function UserProvider({ children }) {
           }
         });
         setDealers(updtDealerList); 
+
+        // added code to keep transactions in state synced with database
+        const transUpdatedList = transactions.map((t) => {
+            if (t.id === transObj.id) {
+                return transObj
+            } else {
+                return t
+            }
+        })
+        setTransactions(transUpdatedList)
+
       }
 
     const addDealer = (dealerObj) => {
@@ -133,7 +163,7 @@ function UserProvider({ children }) {
     }
 
     return (
-        <UserContext.Provider value={{ user, setDealers, loading, loggedIn, signup, login, logout, dealers, addDealer, gotAllDealers, allDealers, fetchAllDealers, addAllDealer , addTrans, deleteTrans, updateTrans }}>
+        <UserContext.Provider value={{ user, setDealers, loading, loggedIn, signup, login, logout, dealers, addDealer, gotAllDealers, allDealers, fetchAllDealers, addAllDealer , addTrans, deleteTrans, updateTrans, transactions, fetchMyTrans }}>
             {children}
         </UserContext.Provider>
     );

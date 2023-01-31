@@ -8,6 +8,7 @@ import Home from "./components/Home";
 import Dealers from "./components/Dealers";
 import AllDealers from "./components/AllDealers";
 import AllDealerForm from "./components/AllDealerForm";
+import TransactionAll from "./components/TransactionAll";
 import TransactionForm from "./components/TransactionForm";
 import TransactionDelete from "./components/TransactionDelete";
 import TransactionUpdate from "./components/TransactionUpdate";
@@ -19,8 +20,6 @@ function App() {
 
   if(loading) return <h1>Loading</h1>
 
-
-
   return (
     <>
       <main>
@@ -31,6 +30,7 @@ function App() {
             <Route exact path="/dealers" component={Dealers} />
             <Route exact path="/alldealers" component={AllDealers} />
             <Route path="/dealers/new" component={AllDealerForm} />
+            <Route exact path="/transactions" component={TransactionAll} />
             <Route exact path="/transactions/new" component={TransactionForm} />
             <Route path="/dealers/:dealer_id/transactions/delete" component={TransactionDelete} />
             <Route path="/dealers/:dealer_id/transactions/edit" component={TransactionUpdate} />
